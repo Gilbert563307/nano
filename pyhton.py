@@ -65,8 +65,8 @@ class Nano:
         # rand om getaal.
         # Laat de computer een random integer bepalen. (check)
         # Bepaal hoe vaak de gebruiker mag raden en hoe hoog het getal maximaal mag zijn. (check)
-        # Gebruik een for-loop om de gebruiker een x-aantal keer te laten raden.
-        # Communiceer aan de gebruiker hoe vaak de gebruiker mag raden en of het getal al wel of niet geraden is.
+        # Gebruik een for-loop om de gebruiker een x-aantal keer te laten raden.(check)
+        # Communiceer aan de gebruiker hoe vaak de gebruiker mag raden en of het getal al wel of niet geraden is.(check)
 
         lowest_guessable_number: int = 0
         highest_guessable_number: int = 15
@@ -89,6 +89,11 @@ class Nano:
         # set variable to track is user has guessed the number correct, this is added for message tracking
         has_user_guessed_the_number: bool = False
         for times_to_guess in range(number_of_times_user_can_guess):
+
+            # tell user how manu guesses he still has left
+            times_to_guess_calculated = number_of_times_user_can_guess - times_to_guess
+            print(f"Je heb nog {times_to_guess_calculated} pogingen.")
+
             guessed_number: int = input("Vul hier het getal in: \n")
             results = self.checkGuessedNumber(
                 guessed_number, computer_generated_random_inter
@@ -107,11 +112,8 @@ class Nano:
             print(f"Je heb het nummer niet geraden, \n")
 
         # closing meessage
-        print(
-            f"Het spel sluit zich nu af.\n"
-        )
+        print(f"Het spel sluit zich nu af.\n")
         self.printGameOptionsToUser()
-
 
     def run(self):
         game_started: bool = self.checkIfGameisRunning()
