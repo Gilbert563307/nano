@@ -1,9 +1,17 @@
+from colorama import Fore, Style
+
+
 class Helpers:
 
     def __init__(self) -> None:
         pass
 
-    def printGameOptionsToUser(self):
+    def printGameOptionsToUser(self, header: bool):
+        if header:
+            print(
+                Fore.GREEN
+                + "Hier kan je een keuze maken voor welke type game je wilt spelen.\n"
+            )
         messages: list = [
             "Kies (1) voor Raad het getal?",
             "Kies (2) voor Voor je persoonlijke dagboek",
@@ -24,7 +32,7 @@ class Helpers:
         if int(user_input) == number_to_guess:
             return True
         return False
-    
+
     def checkIfUserInputIsAValidInt(self, user_input: str) -> bool:
         # only checks if  input is not empty
         if user_input == "":
@@ -35,3 +43,6 @@ class Helpers:
             return False
 
         return True
+
+    def resetTerminalColour(self) -> None:
+        print(Style.RESET_ALL)

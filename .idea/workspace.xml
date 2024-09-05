@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="45221af5-af7c-43d8-b7ab-5e71b27448a1" name="Changes" comment="" />
+    <list default="true" id="45221af5-af7c-43d8-b7ab-5e71b27448a1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/DiaryController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/DiaryController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyhton.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyhton.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,9 +15,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2lbCyeM0ZvckP9kbK4sfsdEm8SB" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -23,7 +28,7 @@
     "Python.pyhton.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/ssemp/OneDrive/Bureaublad/MYHU/nano",
+    "last_opened_file_path": "C:/Users/ssemp/Documents/MYHU/PROG/nano",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -45,6 +50,7 @@
       <option name="presentableId" value="Default" />
       <updated>1725439646681</updated>
       <workItem from="1725439647693" duration="198000" />
+      <workItem from="1725486817236" duration="145000" />
     </task>
     <servers />
   </component>
