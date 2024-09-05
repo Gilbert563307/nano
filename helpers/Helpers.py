@@ -15,8 +15,9 @@ class Helpers:
             self.resetTerminalColour()
         messages: list = [
             "Kies (1) voor Raad het getal?",
-            "Kies (2) voor Voor je persoonlijke dagboek",
-            "Kies (3) om het nano appstore af te sluiten\n",
+            "Kies (2) voor je persoonlijke dagboek",
+            "Kies (3) voor Galgje",
+            "Kies (10) om het nano appstore af te sluiten\n",
         ]
 
         for message in messages:

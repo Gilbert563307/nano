@@ -1,5 +1,6 @@
 from controller.RandomNumberGuesserController import RandomNumberGuesserController
 from controller.DiaryController import DiaryController
+from controller.HangManController import HangManController
 from helpers.Helpers import Helpers
 from colorama import Fore, Style
 
@@ -28,11 +29,12 @@ class NanoXLController:
                 print("Vul een getaal in\n")
 
             # define game modes
-            GUESS_THE_NUMBER_REQUEST = 1
-            DIARY_REQUEST = 2
+            GUESS_THE_NUMBER_REQUEST:int = 1
+            DIARY_REQUEST:int = 2
+            HANG_REQUEST:int = 3
 
             # create array of allowed gamemodes
-            allowed_requests = [GUESS_THE_NUMBER_REQUEST, DIARY_REQUEST]
+            allowed_requests = [GUESS_THE_NUMBER_REQUEST, DIARY_REQUEST, HANG_REQUEST]
 
             # print("getGameModeToPlay line 21")
             string_to_int_casted_request = int(request)
@@ -53,6 +55,14 @@ class NanoXLController:
                 if string_to_int_casted_request == DIARY_REQUEST:
                     controller = DiaryController()
                     controller.run()
+
+                #check if de gebruiker game mode heeft gekozen voor hangman
+                if string_to_int_casted_request == HANG_REQUEST:
+                    controller = HangManController()
+                    controller.run()
+
+
+
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [handleRequest]: {e}")
@@ -74,9 +84,11 @@ class NanoXLController:
                 if mode_selected != "" and mode_selected.isnumeric() == True:
                     # print("keueze is " + mode_selected) TODO REMOVE
 
-                    # detect if option 3 is chosen is closed
+                    CLOSE_REQUEST: int = 10
+
+                    # detect if option 10 is chosen is closed
                     string_to_int_casted_mode = int(mode_selected)
-                    if string_to_int_casted_mode == 3:
+                    if string_to_int_casted_mode == CLOSE_REQUEST:
                         print("Nano store afgesloten")
                         break
 
