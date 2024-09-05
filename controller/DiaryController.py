@@ -147,7 +147,7 @@ class DiaryController:
 
                 while waiting_for_user_to_enter_date:
                     date_to_search: str = input(
-                        "Voer de datum in het formaat dag/maand/jaar in:\n"
+                        "Voer de datum in het formaat dag/maand/jaar in (bijv. 01/12/2024):\n"
                     )
                     # checks  if the user inputed date is a valid string that has dag/maand/jaar format
                     is_gived_date_to_search_valid: (
@@ -207,7 +207,7 @@ class DiaryController:
             # print msg to user that there is no record in diary of given data
             print("Geen record gevonden voor de opgegeven datum.")
             print(
-                f"Voer een waarde in; deze wordt onder de opegegeven {date}  datum opgeslagen.\n"
+                f"Voer een waarde in; deze wordt onder de opegegeven {date} datum opgeslagen.\n"
             )
             # ask user for message
             message_to_save: str = self.askUserForNote()
@@ -283,7 +283,7 @@ class DiaryController:
     def promptUserToOverrideExistingNote(self, date_to_overide: str) -> None:
         try:
             print(
-                f"Voer een waarde in; deze wordt onder de opegegeven {date_to_overide}  datum opgeslagen.\n"
+                f"Voer een waarde in; deze wordt onder de opegegeven {date_to_overide} datum opgeslagen.\n"
             )
             # ask user for message
             message_to_save: str = self.askUserForNote()

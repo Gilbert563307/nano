@@ -38,8 +38,6 @@ class RandomNumberGuesserController:
             # times user can guess
             number_of_times_user_can_guess: int = 5
             print(f"Je krijgt 5 pogingen \n")
-            # remove one becuase the loop starts from 0, it will be six
-            print(f"computer_generated_random_inter {computer_generated_random_inter}")
 
             # set variable to track is user has guessed the number correct, this is added for message tracking
             has_user_guessed_the_number: bool = False
@@ -63,19 +61,19 @@ class RandomNumberGuesserController:
                     # set the tracking state to true
                     has_user_guessed_the_number = True
                     print(Fore.GREEN + "Je heb het getaal correct geraden!!!! ")
+
                     # end foor loop then if user has guessed the number
                     break
 
             # if the user has not guessed the number correct
             if has_user_guessed_the_number == False:
                 print("\n")
-                print(Fore.RED + "Je heb het nummer niet geraden, \n")
+                self._getHelpersService().printColouredMessage("Je heb het nummer niet geraden.", color=Fore.RED)
 
             # closing meessage
-            print(Fore.RED + "Het spel sluit zich nu af.\n")
-            self._getHelpersService().resetTerminalColour()
+            print("Het spel sluit zich nu af.\n")
             # TODO ASK IF NEEDED TO END GAME, because main gameloop is still running in NanoXLController IN LES
-            self._getHelpersService().printGameOptionsToUser()
+            self._getHelpersService().printGameOptionsToUser(header=True)
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [RandomNumberGuesserController-run]: {e}")

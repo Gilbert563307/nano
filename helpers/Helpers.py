@@ -6,12 +6,13 @@ class Helpers:
     def __init__(self) -> None:
         pass
 
-    def printGameOptionsToUser(self, header: bool):
+    def printGameOptionsToUser(self, header: bool = False):
         if header:
             print(
                 Fore.GREEN
                 + "Hier kan je een keuze maken voor welke type game je wilt spelen.\n"
             )
+            self.resetTerminalColour()
         messages: list = [
             "Kies (1) voor Raad het getal?",
             "Kies (2) voor Voor je persoonlijke dagboek",
@@ -46,3 +47,7 @@ class Helpers:
 
     def resetTerminalColour(self) -> None:
         print(Style.RESET_ALL)
+
+    def printColouredMessage(self, message, color) -> None:
+        print(color + message)
+        self.resetTerminalColour()
