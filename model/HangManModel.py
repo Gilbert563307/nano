@@ -13,22 +13,22 @@ class HangManModel:
     def _getHelpersService(self) -> Helpers:
         return Helpers()
 
-    def getHangManJsonFileName(self) -> str:
+    def getHangManFileName(self) -> str:
         try:
-            file_name: str = "hangmanwords.json"
+            file_name: str = "hangmanwords.txt"
             return file_name
         except Exception as e:
             # Handles the exception
-            print(f"An error [getHangManJsonFileName]: {e}")
+            print(f"An error [getHangManFileName]: {e}")
 
-    def getHangManJsonFilePath(self) -> str:
+    def getHangManFilePath(self) -> str:
         try:
             # get current folder diir
             current_dir_path: str = (
                 self._getHelpersService().getCurrentWorkingDirFolderPath()
             )
             # get folder name
-            file_name: str = self.getHangManJsonFileName()
+            file_name: str = self.getHangManFileName()
 
             # create file path
             file_path: str = f"{current_dir_path}\json\{file_name}"
@@ -36,28 +36,38 @@ class HangManModel:
             return file_path
         except Exception as e:
             # Handles the exception
-            print(f"An error [getHangManJsonFilePath]: {e}")
+            print(f"An error [getHangManFilePath]: {e}")
 
     def getHangManWordsByDifficulty(self, difficulty=1) -> list[str]:
         try:
             # get file name
-            file_name: str = self.getHangManJsonFilePath()
-            with open(file_name) as file:
-                listObj = json.load(file)
+            file_name: str = self.getHangManFilePath()
+            with open(file_name, "r") as file:
+                content = file.read()
 
-            # loop through the data
-            for item in listObj:
+            # Split the content by commas, this will create a list of words
+            words = content.split(",")
+
+            # create temp words array
+            words_array: list[str] = []
+
+            #  Loop through each word in the list
+            for item in words:
+                # Strip any extra spaces or newlines around the word
+                word = item.strip()
                 # if  difficulty == easy
                 if difficulty == config.EASY_WORDS_OPTION:
-                    return item["makkelijke_woorden"]
+                    words_array.append(word)
 
                 # if  difficulty == average
                 if difficulty == config.AVERAGE_WORDS_OPTION:
-                    return item["gemiddelde_woorden"]
+                    words_array.append(word)
 
                 # if  difficulty == HARD
                 if difficulty == config.HARD_WORDS_OPTION:
-                    return item["moeilijke_woorden"]
+                    words_array.append(word)
+
+            return words_array
 
         except Exception as e:
             # Handles the exception
@@ -67,7 +77,7 @@ class HangManModel:
         try:
 
             # create file path
-            file_path: str = self.getHangManJsonFilePath()
+            file_path: str = self.getHangManFilePath()
 
             # check if the file exists
             file_exists = os.path.isfile(file_path)
@@ -82,7 +92,7 @@ class HangManModel:
                 self._getHelpersService().getCurrentWorkingDirFolderPath()
             )
             # get folder name
-            file_name: str = self.getHangManJsonFileName()
+            file_name: str = self.getHangManFileName()
 
             # create file path
             file_path: str = f"{current_dir_path}\json\{file_name}"
@@ -104,7 +114,7 @@ class HangManModel:
     def getHangManWords(self, difficulty=1) -> dict:
         try:
             # get file name
-            file_name: str = self.getHangManJsonFileName()
+            file_name: str = self.getHangManFileName()
             # check if the file exists
             does_the_file_exist: bool = self.checkHangmanWordsFileExists()
 
