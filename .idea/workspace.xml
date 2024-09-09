@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="45221af5-af7c-43d8-b7ab-5e71b27448a1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/DiaryController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/DiaryController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyhton.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyhton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/HangManController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/HangManController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/NanoXLController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/NanoXLController.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +30,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/ssemp/Documents/MYHU/PROG/nano",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -51,6 +56,7 @@
       <updated>1725439646681</updated>
       <workItem from="1725439647693" duration="198000" />
       <workItem from="1725486817236" duration="145000" />
+      <workItem from="1725891571832" duration="633000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,30 @@
+[
+    {
+        "makkelijke_woorden": [
+            "huis",
+            "boom",
+            "vis",
+            "kat",
+            "maan"
+        ]
+    },
+    {
+        "gemiddelde_woorden": [
+            "bloem",
+            "kamer",
+            "tafel",
+            "regen",
+            "stoel"
+        ]
+    },
+    {
+        "moeilijke_woorden": [
+            "encyclopedie",
+            "psychologie",
+            "pianist",
+            "kristal",
+            "schilderij"
+        ]
+    }
+]
+

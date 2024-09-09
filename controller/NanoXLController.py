@@ -41,7 +41,7 @@ class NanoXLController:
 
             # check if user has not made right option between 1,2,3
             if string_to_int_casted_request not in allowed_requests:
-                print("Onjuiste keuze probeer het nogmaals\n")
+                print("Onjuiste game keuze probeer het nogmaals\n")
 
             # if user has made the right option
             if string_to_int_casted_request in allowed_requests:

@@ -1,4 +1,5 @@
 from colorama import Fore, Style
+import os
 
 
 class Helpers:
@@ -52,3 +53,11 @@ class Helpers:
     def printColouredMessage(self, message, color) -> None:
         print(color + message)
         self.resetTerminalColour()
+
+    def getCurrentWorkingDirFolderPath(self) -> str:
+        try:
+            cur_path: str = os.getcwd()
+            return cur_path
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [getCurrentWorkingDirFolderPath]: {e}")

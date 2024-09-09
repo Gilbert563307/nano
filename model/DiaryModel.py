@@ -26,7 +26,7 @@ class DiaryModel:
             return file_exists
         except Exception as e:
             # Handles the exception
-            print(f"An error occurred: {e}")
+            print(f"An error occurred [checkIfDiaryFileExists]: {e}")
             return False
 
     def createDiaryFile(self) -> bool:
@@ -41,7 +41,7 @@ class DiaryModel:
             return True
         except Exception as e:
             # Handles the exception
-            print(f"An error occurred: {e}")
+            print(f"An error occurred [createDiaryFile]: {e}")
             return False
 
     def updateDiaryNoteBy(self, date: str, message: str) -> bool:
