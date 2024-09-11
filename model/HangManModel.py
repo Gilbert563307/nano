@@ -55,16 +55,23 @@ class HangManModel:
             for item in words:
                 # Strip any extra spaces or newlines around the word
                 word = item.strip()
+
+                word_len: int = len(word)
+
                 # if  difficulty == easy
-                if difficulty == config.EASY_WORDS_OPTION:
+                if difficulty == config.EASY_WORDS_OPTION and word_len <= 5:
                     words_array.append(word)
 
                 # if  difficulty == average
-                if difficulty == config.AVERAGE_WORDS_OPTION:
+                if (
+                    difficulty == config.AVERAGE_WORDS_OPTION
+                    and word_len > 5
+                    and word_len <= 10
+                ):
                     words_array.append(word)
 
                 # if  difficulty == HARD
-                if difficulty == config.HARD_WORDS_OPTION:
+                if difficulty == config.HARD_WORDS_OPTION and word_len > 10:
                     words_array.append(word)
 
             return words_array
