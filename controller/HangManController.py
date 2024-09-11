@@ -1,6 +1,7 @@
 from helpers.Helpers import Helpers
 from model.HangManModel import HangManModel
 from config import config
+import re
 
 from colorama import Fore
 import random
@@ -146,14 +147,20 @@ class HangManController:
         except Exception as e:
             print(f"An error occurred [getHangManOptions]: {e}")
 
-    def run(self) -> None:
+    def printHangManGameOptions(self) -> None:
         try:
-            showing_options_to_user: bool = True
             # print user options to screen
             print("Kies (1) om Galgje te spelen met makkelijke woorden.")
             print("Kies (2) om Galgje te spelen met gemiddelde woorden.")
             print("Kies (3) om Galgje te spelen met moeilijke woorden.")
             print("Kies (4) om Galgje te spelen met moeilijke woorden.\n")
+        except Exception as e:
+            print(f"An error occurred [printHangManGameOptions]: {e}")
+
+    def run(self) -> None:
+        try:
+            self.printHangManGameOptions()
+            showing_options_to_user: bool = True
 
             while showing_options_to_user:
                 chosen_option: int = self.askUserForChosenHangmanOption()
@@ -173,9 +180,7 @@ class HangManController:
                     # chosen with easy words
                     if chosen_option == 1:
                         self.continueHangManWithEasyOptionsGameMode()
-                        break
 
-                pass
         except Exception as e:
             print(f"An error occurred [run][HangManController]: {e}")
 
@@ -204,39 +209,65 @@ class HangManController:
                 return
 
             # Random word
-            word: str = random.choice(words).lower()
+            word_to_guess: str = random.choice(words).lower()
 
             # Set user tries
-            tries_until_game_stops = len(word)
+            TRIES_UNTIL_GAME_STOPS: int = 7
 
             # vertel gebruiker hoeveel pogingen die heeft
             self._getHelpersService().printColouredMessage(
-                f"Je heb nog {tries_until_game_stops} pogingen. \n",
+                f"Je heb nog {TRIES_UNTIL_GAME_STOPS} pogingen.",
                 Fore.LIGHTGREEN_EX,
             )
 
             # TODO remove after testing Print health bar, word, ascii hangman,
-            print("Word:", word, "\n")
+            print("Word:", word_to_guess, "\n")
 
             # print game status]
-            self.printBeginingGameStats(word, tries_until_game_stops)
+            self.printBeginingGameStats(word_to_guess, TRIES_UNTIL_GAME_STOPS)
 
             # create orrect_guessed_chars list
             correct_guessed_chars = []
 
             # game logic here
-            for x in range(0, tries_until_game_stops):
+            for x in range(0, TRIES_UNTIL_GAME_STOPS):
                 # get letter from user
                 character: str = self.askUserForLetter()
 
-                if character in word:
-                    # save the correct guessed char into an array
-                    correct_guessed_chars.append(character)
+                # if the chacter is the word and the character is not already gussed by the user
+                if (
+                    character in word_to_guess
+                    and character not in correct_guessed_chars
+                ):
+                    # get correct gussed characters
+                    self.getCorrectGuessedCharacters(
+                        character, word_to_guess, correct_guessed_chars
+                    )
 
-                    # print game stats
-                    self.printGameStats(word, character, correct_guessed_chars)
-                else:
-                    #TODO finish game logic if user hasnt gotten the word right
+                    # get game stats
+                stats: dict = self.getGameStats(
+                    word_to_guess, character, correct_guessed_chars
+                )
+                self._getHelpersService().printColouredMessage(
+                    stats["message"], Fore.BLUE
+                )
+
+                # check if the the player has already gussed the word
+                player_has_won_game: bool = self.checkIfPlayerHasWonGame(
+                    stats["word"], word_to_guess
+                )
+
+                if player_has_won_game:
+                    message: str = "Je heb gewonnen"
+                    self._getHelpersService().printColouredMessage(message, Fore.GREEN)
+                    # end game loop
+                    TRIES_UNTIL_GAME_STOPS = 0
+                    self.printHangManGameOptions()
+                    return
+
+                # if charactet is not in word
+                if character not in word_to_guess:
+                    # TODO finish game logic if user hasnt gotten the word right
                     print("no char in word")
 
         except Exception as e:
@@ -284,21 +315,22 @@ class HangManController:
         try:
             while True:
                 # get user input
-                user_input: str = input("Vul hier een karakter in: \n")
+                user_input: str = input("Vul hier een karakter in:")
 
                 # if user option is blank
                 if user_input == "":
                     self._getHelpersService().printColouredMessage(
                         "Je naam mag niet leeg zijn\n", Fore.RED
                     )
-                
-                #if user character lenght is over 1
+
+                # if user character lenght is over 1
                 if len(user_input) > 1:
                     self._getHelpersService().printColouredMessage(
                         "Je mag slechts één karakter per keer invoeren.", Fore.RED
                     )
 
-                return user_input.lower()
+                if len(user_input) == 1:
+                    return user_input.lower()
 
         except Exception as e:
             print(f"An error occurred [askUserForLetter]: {e}")
@@ -307,6 +339,40 @@ class HangManController:
         try:
             # create a list of the alphabet in uppercase
             alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+        except Exception as e:
+            print(f"An error occurred [getAlfabetToDisplay]: {e}")
+
+    def getCorrectGuessedCharacters(
+        self, character: str, word_to_guess: str, correct_guessed_chars: list[str]
+    ) -> list[str]:
+        try:
+
+            # check if the occurence of the string is more than onece
+            string_occurence_in_word_to_guess: int = word_to_guess.count(character)
+
+            # if the user input character is more than once in the word to guess
+            if string_occurence_in_word_to_guess > 1:
+                for occurence in range(0, string_occurence_in_word_to_guess):
+                    # append that character multiple times
+                    correct_guessed_chars.append(character)
+            else:
+                # append only once
+                correct_guessed_chars.append(character)
+
+        except Exception as e:
+            print(f"An error occurred [getCorrectGuessedCharacters]: {e}")
+
+    def checkIfPlayerHasWonGame(
+        self, guessed_word: list[str], word_to_guess: str
+    ) -> bool:
+        try:
+            # check if that word matches the word to guess
+            if guessed_word == word_to_guess:
+                return True
+
+            # else return false
+            return False
 
         except Exception as e:
             print(f"An error occurred [getAlfabetToDisplay]: {e}")
@@ -326,10 +392,27 @@ class HangManController:
         except Exception as e:
             print(f"An error occurred [printBeginingGameStats]: {e}")
 
-    def printGameStats(
-        self, word_to_guess: str, user_inputted_character, all_ready_guessed_chars
-    ) -> str:
+    def getWordPositions(self, word_to_guess: str) -> list[dict]:
         try:
+            dict_data: list[dict] = []
+
+            pos = -1
+            for char in word_to_guess:
+                pos += 1
+                data = {"pos": pos, "char": char}
+                dict_data.append(data)
+
+            return dict_data
+        except Exception as e:
+            print(f"An error occurred [getWordPositions]: {e}")
+
+    def getGameStats(
+        self, word_to_guess: str, user_inputted_character, all_ready_guessed_chars
+    ) -> dict:
+        try:
+            # get the positions of each letter in the word to guess
+            word_postions: list[dict] = self.getWordPositions(word_to_guess)
+
             # create the underscores to show to ther user
             keybaord_len_word: str = ""
 
@@ -337,35 +420,28 @@ class HangManController:
             for char in word_to_guess:
                 keybaord_len_word += "_"
 
-            # create a list from the keybaord_len_word other wise we cant change the pos of that word
+            # create a list from the underscores, because we want to change the index/position of the underscore with the correct character
             list_keybaord_len_word = list(keybaord_len_word)
 
-            # create a list from thr word to guess so that we can get the pos of the char
-            list_word_to_guess = list(word_to_guess)
+            #loop through all the dict data with the character and each position index
+            for dict_data in word_postions:
+                #loop through the already guessed chars
+                for char in all_ready_guessed_chars:
+                    #if char in already gussed char macthes
+                    if char == dict_data["char"]:
+                        #get the postion of that character from the dict
+                        position = dict_data["pos"]
+                        #replace the underscore with the positon u got from the dict with the charcter that is already gussed
+                        list_keybaord_len_word[position] = f"{char}"
 
-            # loop through each character of the word
-            for char in word_to_guess:
-                # if the typed in user character is the word
-                if user_inputted_character in word_to_guess:
-                    # get the position of the char in the word
-                    position: int = list_word_to_guess.index(user_inputted_character)
-
-                    # go to the list of the underscores, get the position of which underscore we want to replace
-                    list_keybaord_len_word[position] = f"{user_inputted_character}"
-
-            # loop through all the characters the user has already guessed
-            for char in all_ready_guessed_chars:
-                # get the pos of the char that is in the created list of thr word to guess
-                position: int = list_word_to_guess.index(char)
-                # replace that underscore with the character
-                list_keybaord_len_word[position] = f"{char}"
-
-            # join that list together and print thr word
+            # join that list together with spaces instead of underscores
             joined_list_word = " ".join(list_keybaord_len_word)
 
             # create message
             message: str = f"Woord: {joined_list_word} \n"
-            self._getHelpersService().printColouredMessage(message, Fore.BLUE)
+
+            #return dict with the word join together instead of with spaces
+            return {"word": "".join(list_keybaord_len_word), "message": message}
 
         except Exception as e:
             print(f"An error occurred [printGameStats]: {e}")
