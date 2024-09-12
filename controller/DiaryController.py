@@ -2,6 +2,7 @@ from helpers.Helpers import Helpers
 from model.DiaryModel import DiaryModel
 import os
 from colorama import Fore, Style
+from config import config
 
 
 class DiaryController:
@@ -19,7 +20,8 @@ class DiaryController:
     def printDiaryAppOptions(self) -> None:
         print("Kies (1) om een nieuwe notitie op te slaan.")
         print("Kies (2) om een bestaande notitie te bekijken.")
-        print("Kies (3) om terug naar de appstore te gaan.\n")
+        print("Kies (3) om een notitie te bewerken.\n")
+        print("Kies (4) om terug naar de appstore te gaan.\n")
 
     def askUserForDiaryPassword(
         self,
@@ -29,7 +31,7 @@ class DiaryController:
             allowed_passwords = ["1234", "password", "utrecht"]
 
             print(
-                "Vul het juiste wachtwoord in om toegang te krijgen tot het dagboek, je heb 3 pogingen: \n"
+                "Vul het juiste wachtwoord in om toegang te krijgen tot het dagboek, je heb 3 pogingen: (ww = 1234/password) \n"
             )
 
             # times user can guess password
@@ -80,123 +82,161 @@ class DiaryController:
                 diary_opened: bool = True
                 print("Successvol ingelod. \n ")
                 print(
-                   Fore.YELLOW + "In het dagboek kun je een nieuwe notitie opslaan of een bestaande log bewerken. \n"
+                    Fore.YELLOW
+                    + "In het dagboek kun je een nieuwe notitie opslaan of een bestaande log bewerken. \n"
                 )
                 self._getHelpersService().resetTerminalColour()
 
                 self.printDiaryAppOptions()
 
-                CREATE_NEW_NOTE_TO_DIARY_OPTION: int = 1
-                READ_EXISTING_NOTE_TO_DIARY_OPTION: int = 2
-                GO_BACK_TO_MAIN_MENU: int = 3
+                allowed_diary_options: list[int] = config.ALLOWED_DIARY_OPTIONS
 
-                # create array of allowed diary options
-                allowed_diary_options = [
-                    CREATE_NEW_NOTE_TO_DIARY_OPTION,
-                    READ_EXISTING_NOTE_TO_DIARY_OPTION,
-                    GO_BACK_TO_MAIN_MENU,
-                ]
-
-                mode: None
                 while diary_opened:
-                    diary_menu_option: str = input("")
-                    # check if de gebruiker  zijn input niet leeg is en een integer bevat
-                    is_user_input_valid = (
-                        self._getHelpersService().checkIfUserInputIsAValidInt(
-                            diary_menu_option
-                        )
+                    # ask user for number, this while loop will not stop until the numer is gotten
+                    diary_menu_option: int = (
+                        self._getHelpersService().askUserForNumber()
                     )
 
-                    # check if user input is false
-                    if is_user_input_valid == False:
-                        print("Je keuze moet een getaal zijn")
-
                     # check if user option is false
-                    if int(diary_menu_option) not in allowed_diary_options:
+                    if diary_menu_option not in allowed_diary_options:
                         print(
-                            "Je keuze moet een getaal tussen 1 en 3 zijn, probeer het nogmaals"
+                            "Je keuze moet een getaal tussen 1 en 4 zijn, probeer het nogmaals"
                         )
 
-                    # check if user option is 1 or two then give access
-                    if int(diary_menu_option) in allowed_diary_options:
-                        mode = int(diary_menu_option)
-
                     # if user wants to go back to store
-                    if mode == GO_BACK_TO_MAIN_MENU:
+                    if diary_menu_option == config.DIARY_GO_BACK_TO_MAIN_MENU:
                         self._getHelpersService().printGameOptionsToUser(header=True)
                         break
 
-                    # if all checks are done the code will break out the loop and call the next function
-                    self.handleDiaryOptionMenuModeByGivenOption(mode)
+                    # check if user option is 1 or two then give access
+                    if diary_menu_option in allowed_diary_options:
+                        self.handleDiaryOptionMenuModeByGivenOption(diary_menu_option)
 
-                        # break
+                # break
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [run]: {e}")
 
-    def handleDiaryOptionMenuModeByGivenOption(self, mode: int):
+    def createNewNoteInDiary(self) -> None:
         try:
-            # create gamemode constants
-            CREATE_NEW_NOTE_IN_DIARY_MODE: int = 1
-            READ_EXISTING_NOTES_IN_DIARY_MODE: int = 2
+            print("Voor welke datum wil je een notitie opslaan? \n")
 
-            if mode == CREATE_NEW_NOTE_IN_DIARY_MODE:
-                print("Voor welke datum wil je een notitie opslaan? \n")
+            waiting_for_user_to_enter_date: bool = True
 
-                waiting_for_user_to_enter_date: bool = True
+            while waiting_for_user_to_enter_date:
+                date_to_search: str = input(
+                    "Voer de datum in het formaat dag/maand/jaar in (bijv. 01/12/2024):\n"
+                )
+                # checks  if the user inputed date is a valid string that has dag/maand/jaar format
+                is_gived_date_to_search_valid: bool = (
+                    self._getDiaryModel().checkIfTheSuggestedDateIsValid(date_to_search)
+                )
+                if is_gived_date_to_search_valid:
+                    self.selfHandleDiaryNoteByGivenDate(date_to_search)
+                    break
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [createNewNoteInDiary]: {e}")
 
-                while waiting_for_user_to_enter_date:
-                    date_to_search: str = input(
-                        "Voer de datum in het formaat dag/maand/jaar in (bijv. 01/12/2024):\n"
+    def readNoteInDiary(self) -> None:
+        try:
+            print(
+                "Voor welke datum wil je de log bekijken? Gebruik het formaat dag/maand/jaar (bijv. 01/12/2024):\n"
+            )
+
+            waiting_for_user_to_enter_date: bool = True
+
+            while waiting_for_user_to_enter_date:
+                # ask user for message
+                message_to_save: str = self.askUserForNote()
+
+                if message_to_save != "":
+                    # check if the note is there
+                    is_note_available_by_given_date: bool = (
+                        self._getDiaryModel().checkIfGivenDateIsExists(message_to_save)
                     )
-                    # checks  if the user inputed date is a valid string that has dag/maand/jaar format
-                    is_gived_date_to_search_valid: (
-                        bool
-                    ) = self._getDiaryModel().checkIfTheSuggestedDateIsValid(
-                        date_to_search
-                    )
-                    if is_gived_date_to_search_valid:
-                        self.selfHandleDiaryNoteByGivenDate(date_to_search)
+
+                    if is_note_available_by_given_date == False:
+                        print(
+                            Fore.RED
+                            + "Er is geen log gevonden voor je opgegeven datum \n"
+                        )
+                        self._getHelpersService().resetTerminalColour()
+                        self.printDiaryAppOptions()
                         break
 
-            if mode == READ_EXISTING_NOTES_IN_DIARY_MODE:
-                print(
-                    "Voor welke datum wil je de log bekijken? Gebruik het formaat dag/maand/jaar (bijv. 01/12/2024):\n"
-                )
-
-                waiting_for_user_to_enter_date: bool = True
-
-                while waiting_for_user_to_enter_date:
-                    # ask user for message
-                    message_to_save: str = self.askUserForNote()
-
-                    if message_to_save != "":
-                        # check if the note is there
-                        is_note_available_by_given_date: (
-                            bool
-                        ) = self._getDiaryModel().checkIfGivenDateIsExists(
+                    if is_note_available_by_given_date:
+                        # fetch note log an return it
+                        diary_log: str = self._getDiaryModel().getDiaryLogByDate(
                             message_to_save
                         )
+                        self._getHelpersService().printColouredMessage(
+                            f"Log: {diary_log} \n", Fore.GREEN
+                        )
+                        self.printDiaryAppOptions()
+                        break
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [readNoteInDiary]: {e}")
 
-                        if is_note_available_by_given_date == False:
-                            print(
-                                Fore.RED
-                                + "Er is geen log gevonden voor je opgegeven datum \n"
-                            )
-                            self._getHelpersService().resetTerminalColour()
-                            self.printDiaryAppOptions()
-                            break
+    def updateNoteInDiary(self) -> None:
+        try:
+            # fetch all diary notes
+            all_notes: list[str] = self._getDiaryModel().getAllNotes()
 
-                        if is_note_available_by_given_date:
-                            # fetch note log an return it
-                            diary_log: str = self._getDiaryModel().getDiaryLogByDate(
-                                message_to_save
-                            )
-                            print(f"Log: {diary_log} \n")
-                            self.printDiaryAppOptions()
-                            break
+            # check for errors
+            if all_notes["error"]:
+                self._getHelpersService().printColouredMessage(
+                    all_notes["message"], Fore.RED
+                )
 
-                    # check if there is a note by given date
+                self.printDiaryAppOptions()
+                # end game loop
+                return
+
+            # if no there are no errors
+            results: str = self.getNotesToDisplayText(all_notes["notes"])
+            text_to_user: str = results["text_to_user"]
+
+            # get the dates with the index number
+            dates_linked_to_index: list[dict] = results["dates_linked_to_index"]
+
+            # print notes to user
+            self._getHelpersService().printColouredMessage(
+                text_to_user, Fore.LIGHTCYAN_EX
+            )
+
+            # get all the correct indexes:
+            index_list: list[int] = results["index_list"]
+
+            # ask user for the index, this will loop until the user typed index in in the list
+            index_to_search: int = self.askUserForIndexAndCheckIfItsTheList(index_list)
+
+            # get date linked to that index
+            date_to_update: str = next(
+                item["date"]
+                for item in dates_linked_to_index
+                if item["index"] == index_to_search
+            )
+
+            # prompt user to overide log on that date
+            self.promptUserToChooseOptionAfterNotAvaiableDateLog(date_to_update, False)
+            return
+
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [updateNoteInDiary]: {e}")
+
+    def handleDiaryOptionMenuModeByGivenOption(self, mode: int):
+        try:
+            if mode == config.CREATE_NEW_NOTE_IN_DIARY_MODE:
+                self.createNewNoteInDiary()
+
+            if mode == config.READ_EXISTING_NOTES_IN_DIARY_MODE:
+                self.readNoteInDiary()
+
+            if mode == config.UPDATE_EXISTING_NOTE:
+                self.updateNoteInDiary()
 
         except Exception as e:
             # Handles the exception
@@ -228,10 +268,10 @@ class DiaryController:
 
                 if message_created:
                     # print message that note is saved
-                    print("Jou notitie is opgeslagen in het dagboek \n")
+                    message: str = "Jou notitie is opgeslagen in het dagboek \n"
+                    self._getHelpersService().printColouredMessage(message, Fore.GREEN)
 
                     # show options back to user
-                    print("\n")
                     self.printDiaryAppOptions()
 
         except Exception as e:
@@ -275,7 +315,6 @@ class DiaryController:
                             date_to_search
                         )
 
-
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [selfHandleDiaryNoteByGivenDate]: {e}")
@@ -295,25 +334,30 @@ class DiaryController:
                 )
 
                 if message_created == False:
-                    print("Er is iets mis gegeaan met het wijzigen van je bericht.\n")
+                    self._getHelpersService().printColouredMessage(
+                        "Er is iets mis gegeaan met het wijzigen van je bericht.\n",
+                        Fore.RED,
+                    )
 
                 if message_created:
-                    print("Jou log is gewijzigd.\n")
+                    self._getHelpersService().printColouredMessage(
+                        "Jou log is gewijzigd.\n", Fore.GREEN
+                    )
 
-                    #todo show options back to user TOO ADD OPTION 3
-                    print("Kies (1) om een nieuwe notitie op te slaan.")
-                    print("Kies (2) om een bestaande notitie te bekijken.\n")
+                    # print home options to user
+                    self.printDiaryAppOptions()
 
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [promptUserToOverrideExistingNote]: {e}")
 
     def promptUserToChooseOptionAfterNotAvaiableDateLog(
-        self, date_to_overide: str
+        self, date_to_overide: str, print_header_message: bool = True
     ) -> None:
         try:
             # if its not free then give user two options
-            print("Er is al een log voor de opgegeven datum.\n")
+            if print_header_message:
+                print("Er is al een log voor de opgegeven datum.\n")
             print("Wil je de huidige tekst overschrijven?\n")
             print("Kies (1) om te bevestigen, of (2) om te annuleren.")
 
@@ -343,13 +387,12 @@ class DiaryController:
 
                 # if user cancels
                 if int(chosen_option_todo) == EXIT_OPTION:
-                    print("Annulering \n")  # TODO finish remove
-                    print("Kies (1) om een nieuwe notitie op te slaan.")
-                    print("Kies (2) om een bestaande notitie te bekijken.\n")
+                    self._getHelpersService().printColouredMessage("Annulering \n", Fore.RED)
+                    self.printDiaryAppOptions()
                     break
 
                 if int(chosen_option_todo) == OVERRITE_EXISTING_LOG_OPTION:
-                    # TODO save new text
+                    # save new text
                     self.promptUserToOverrideExistingNote(date_to_overide)
                     break
 
@@ -374,4 +417,76 @@ class DiaryController:
 
         except Exception as e:
             # Handles the exception
-            print(f"An error occurred: {e}")
+            print(f"An error occurred [askUserForNote]: {e}")
+
+    def getNotesToDisplayText(self, notes: list[str]) -> dict:
+        try:
+            # create list that contains dict data to link index to a date
+            dates_linked_to_index: list[dict] = []
+
+            # create list to store only indexes int
+            index_list: list[int] = []
+
+            # create string to let user choose from
+            text_to_user: str = ""
+
+            # log messages to user
+            self._getHelpersService().printColouredMessage(
+                f"Alle notities:", Fore.LIGHTGREEN_EX
+            )
+
+            self._getHelpersService().printColouredMessage(
+                "Selecteer een datum door het nummer van de gewenste optie in te vullen:",
+                Fore.RED,
+            )
+
+            # create index count
+            index = 0
+            # loop through json data
+            for note in notes:
+                # increment index
+                index += 1
+
+                # push indexes into indexes list
+                index_list.append(index)
+
+                # create dict data, messages a linked to the index
+                dict_data: dict = {"index": index, "date": note["date"]}
+                dates_linked_to_index.append(dict_data)
+
+                # create string to show to ther user
+                text: str = (
+                    f"[{index}]: Datum: {note['date']} Notitie: {note['description']} \n"
+                )
+                text_to_user += text
+
+            return {
+                "text_to_user": text_to_user,
+                "dates_linked_to_index": dates_linked_to_index,
+                "index_list": index_list,
+            }
+
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [getNotesToDisplayText]: {e}")
+
+    def askUserForIndexAndCheckIfItsTheList(self, index_list: list[int]) -> int:
+        try:
+            # ask user for the index, this loop
+            index_to_search: int = self._getHelpersService().askUserForNumber()
+
+            # retun the index
+            if index_to_search in index_list:
+                return index_to_search
+
+            if index_to_search not in index_list:
+                text: str = ",".join(str(v) for v in index_list)
+                self._getHelpersService().printColouredMessage(
+                    f"Kies een getal tussen {text}", Fore.RED
+                )
+                # recoursion
+                return self.askUserForIndexAndCheckIfItsTheList(index_list)
+
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [checkIfIndexIsInList]: {e}")

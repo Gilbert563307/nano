@@ -11,16 +11,23 @@ class DiaryModel:
     def _getHelpersService(self) -> Helpers:
         return Helpers()
 
-
     def getDiaryJsonFileName(self) -> str:
-        file_name: str = "dagboek.json"
-        return file_name
+        try:
+            file_name: str = "dagboek.json"
+            return file_name
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [getDiaryJsonFileName]: {e}")
 
     def checkIfGivenPasswordValid(self, password: str, valid_password: list) -> bool:
-        if password not in valid_password:
-            return False
-        return True
-    
+        try:
+            if password not in valid_password:
+                return False
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [checkIfGivenPasswordValid]: {e}")
+
     def getDiaryFilePath(self) -> str:
         try:
             # get current folder diir
@@ -37,7 +44,7 @@ class DiaryModel:
         except Exception as e:
             # Handles the exception
             print(f"An error [getDiaryFilePath]: {e}")
-    
+
     def checkIfDiaryFileExists(self) -> bool:
         try:
             # define file name
@@ -95,14 +102,14 @@ class DiaryModel:
             # Handles the exception
             print(f"An error occurred: [updateDiaryNoteBy] {e}")
             return False
-        
+
     def checkIfGivenDateIsExists(self, date: str) -> bool:
         try:
             # get file name
             file_name: str = self.getDiaryFilePath()
             with open(file_name) as file:
                 listObj = json.load(file)
-            
+
             # loop through the data
             for item in listObj:
                 date_from_json_data: str = item["date"]
@@ -111,7 +118,7 @@ class DiaryModel:
                 if date_from_json_data == date:
                     # return the message
                     return True
-                
+
             return False
         except Exception as e:
             # Handles the exception
@@ -156,7 +163,7 @@ class DiaryModel:
             return True
         except Exception as e:
             # Handles the exception
-            print(f"An error occurred in [saveDiaryNoteToGivenDate]: {e}")
+            print(f"An error occurred in [createDiaryNoteByGivenDate]: {e}")
             return False
 
     def isDiaryFileEmpty(self) -> bool:
@@ -178,20 +185,24 @@ class DiaryModel:
             print(f"An error occurred in [isDiaryFileEmpty]: {e}")
 
     def checkIfGivenDateIsFreeInDiary(self, date_to_check: str) -> bool:
-        # get file name
-        file_name = self.getDiaryFilePath()
-        # open file name
-        with open(file_name, "r") as file:
-            jsonData = json.load(file)
+        try:
+            # get file name
+            file_name = self.getDiaryFilePath()
+            # open file name
+            with open(file_name, "r") as file:
+                jsonData = json.load(file)
 
-        # loop through the data in the json file
-        for item in jsonData:
-            date_from_json_data: str = item["date"]
-            # if date already exists
-            if date_from_json_data == date_to_check:
-                return False
-        return True
-    
+            # loop through the data in the json file
+            for item in jsonData:
+                date_from_json_data: str = item["date"]
+                # if date already exists
+                if date_from_json_data == date_to_check:
+                    return False
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred in [checkIfGivenDateIsFreeInDiary]: {e}")
+
     def getDiaryLogByDate(self, date: str) -> str:
         try:
             # get file name
@@ -208,17 +219,60 @@ class DiaryModel:
             return "Er is een geen log gevonden"
         except Exception as e:
             # Handles the exception
-            print(f"An error occurred in [isDiaryFileEmpty]: {e}")
-    
+            print(f"An error occurred in [getDiaryLogByDate]: {e}")
+
     def checkIfTheSuggestedDateIsValid(self, date_to_check: str) -> bool:
-        allowed_string_lengths = [10, 9, 8]
+        try:
+            allowed_string_lengths = [10, 9, 8]
 
-        # check if date lenght is oke
-        if len(date_to_check) not in allowed_string_lengths:
-            return False
+            # check if date lenght is oke
+            if len(date_to_check) not in allowed_string_lengths:
+                return False
 
-        # check if date contains  two slahes
-        if date_to_check.count("/") != 2:
-            return False
+            # check if date contains  two slahes
+            if date_to_check.count("/") != 2:
+                return False
 
-        return True
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred in [checkIfTheSuggestedDateIsValid]: {e}")
+
+    def getAllNotes(self) -> dict:
+        try:
+            # check if diary file exists
+            file_exists: bool = self.checkIfDiaryFileExists()
+
+            # get file path
+            file_path_and_name: str = self.getDiaryFilePath()
+
+            # if diary file does not exist
+            if file_exists == False:
+
+                # create message
+                message: str = (
+                    f"Het bestand '{file_path_and_name}' is niet gevonden, dus er zijn geen notities beschikbaar."
+                )
+                # return response
+                return {"notes": [], "message": message, "error": True}
+
+            # if file exists
+            if file_exists:
+                # get file empty
+                is_file_empty: bool = self.isDiaryFileEmpty()
+                # check if file is empty
+                if is_file_empty:
+                    message: str = "Er zijn geen notities gevonden"
+                    return {"notes": [], "message": message, "error": True}
+
+                # check if file is not empty
+                if is_file_empty == False:
+                    # get file data
+                    with open(file_path_and_name, "r") as file:
+                        jsonData = json.load(file)
+
+                return {"notes": jsonData, "message": "", "error": False}
+
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred in [getAllNotes]: {e}")

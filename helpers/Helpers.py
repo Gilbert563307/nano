@@ -7,8 +7,30 @@ class Helpers:
 
     def __init__(self) -> None:
         pass
-    
-    def getTodaysDate() -> str:
+
+    def askUserForNumber(self) -> int:
+        try:
+            while True:
+                # get user input
+                option: str = input("Vul hier het getal in: \n")
+
+                # if user option is blank
+                if option.strip() == "":
+                    message = "Je keuze mag niet leeg zijn.\n"
+                    self.printColouredMessage(message, Fore.RED)
+                    continue
+
+                # Check if the input is numeric
+                if option.strip().isnumeric():
+                    return int(option)
+                else:
+                    message: str = "Voer een geldig getal in.\n"
+                    self.printColouredMessage(message, Fore.RED)
+
+        except Exception as e:
+            print(f"An error occurred [askUserForNumber]: {e}")
+
+    def getTodaysDate(self) -> str:
         try:
             today = date.today()
 
@@ -17,7 +39,6 @@ class Helpers:
             return date_str
         except Exception as e:
             print(f"An error occurred [getTodaysDate]: {e}")
-
 
     def printGameOptionsToUser(self, header: bool = False):
         if header:
@@ -35,7 +56,6 @@ class Helpers:
 
         for message in messages:
             print(message)
-
 
     def checkIfUserInputIsAValidInt(self, user_input: str) -> bool:
         # only checks if  input is not empty

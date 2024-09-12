@@ -89,12 +89,11 @@ class NanoXLController:
                     # detect if option 10 is chosen is closed
                     string_to_int_casted_mode = int(mode_selected)
                     if string_to_int_casted_mode == CLOSE_REQUEST:
-                        print("Nano store afgesloten")
-                        break
+                        self._getHelpersService().printColouredMessage("Nano store afgesloten", Fore.MAGENTA)
+                        return
 
                     self.handleRequest(mode_selected)
                     # end while loop TODO if we want to keep the game loop running remove break
-                    # break
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [NanoXLController-run]: {e}")

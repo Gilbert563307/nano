@@ -164,7 +164,7 @@ class HangManController:
             # print user options to screen
             print("Kies (1) om Galgje te spelen met makkelijke woorden.")
             print("Kies (2) om Galgje te spelen met gemiddelde woorden.")
-            print("Kies (3) om Galgje te spelen met moeilijke woorden.")
+            print("Kies (3) om Galgje te spelen met moeilijke woorden.\n")
             print("Kies (4) om Galgje af te sluiten.\n")
         except Exception as e:
             print(f"An error occurred [printHangManGameOptions]: {e}")
@@ -288,8 +288,8 @@ class HangManController:
                 Fore.LIGHTGREEN_EX,
             )
 
-            # TODO remove after testing Print health bar, word, ascii hangman,
-            print("Word:", word_to_guess, "\n")
+            # TODO remove after testing 
+            #print("Word:", word_to_guess, "\n")
 
             # print game status]
             self.printBeginingGameStats(word_to_guess, tries_until_game_stops)
@@ -305,21 +305,29 @@ class HangManController:
                 # get letter from user
                 character: str = self.askUserForLetter()
 
-                #if user has typed a character increment the score
+                # if user has typed a character increment the score
                 if character:
                     how_many_times_has_user_guessed_score += 1
 
                 # if the chacter is the word and the character is not already gussed by the user
-                if  character in word_to_guess and character not in correct_guessed_chars:
+                if (
+                    character in word_to_guess
+                    and character not in correct_guessed_chars
+                ):
                     # get correct gussed characters
                     self.getCorrectGuessedCharacters(
                         character, word_to_guess, correct_guessed_chars
                     )
                 else:
-                    #check if the user input char is in the word & if the character is already in the correct guessed chars list
-                    if character in word_to_guess and character in correct_guessed_chars:
+                    # check if the user input char is in the word & if the character is already in the correct guessed chars list
+                    if (
+                        character in word_to_guess
+                        and character in correct_guessed_chars
+                    ):
                         message: str = "Het ingevulde karakter is al gekozen"
-                        self._getHelpersService().printColouredMessage(message, Fore.RED)
+                        self._getHelpersService().printColouredMessage(
+                            message, Fore.RED
+                        )
 
                 # get game stats
                 stats: dict = self.getGameStats(
@@ -341,7 +349,7 @@ class HangManController:
                     # end game loop
                     tries_until_game_stops = 0
                     self.printHangManGameOptions()
-                    
+
                     score: int = how_many_times_has_user_guessed_score
                     self.saveUserScore(score, True)
                     return
@@ -365,11 +373,11 @@ class HangManController:
             # when player tries_until_game_stops get to zero the loop stops and gets here
             message: str = "Je heb verloren"
             self._getHelpersService().printColouredMessage(message, Fore.RED)
-            
-            #save user score
+
+            # save user score
             score: int = how_many_times_has_user_guessed_score
             self.saveUserScore(score, False)
-            #print game options to user so that he can restart the game
+            # print game options to user so that he can restart the game
             self.printHangManGameOptions()
             return
 
@@ -382,17 +390,21 @@ class HangManController:
 
             while True:
                 # get user input
-                option: str = int(input(""))
+                option: str = input("")
 
                 # if user option is blank
                 if option == "":
                     print("Maak een keuze:\n")
 
-                # check
-                if option not in available_options:
-                    print("Maak een keuze tussen 1/4")
-
-                return option
+                # Check if the input is numeric
+                if option.strip().isnumeric():
+                    # check
+                    if int(option) not in available_options:
+                        print("Maak een keuze tussen 1/4")
+                    else:
+                        return int(option)
+                else:
+                    print("Je keuze moet een getal zijn")
 
         except Exception as e:
             print(f"An error occurred [askUserForChosenHangmanOption]: {e}")

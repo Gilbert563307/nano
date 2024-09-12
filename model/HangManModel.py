@@ -44,7 +44,7 @@ class HangManModel:
             todays_date: str = self._getHelpersService().getTodaysDate()
 
             # genrate txt to write
-            text_to_write: str = f"\n{name};woord geraden:{win_str};aantal keer:{score};datum{todays_date}"
+            text_to_write: str = f"\n{name};woord geraden:{win_str};aantal keer:{score};datum:{todays_date}"
 
             # write to file
             file.write(text_to_write)

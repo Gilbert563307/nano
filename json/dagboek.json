@@ -1,7 +1,7 @@
 [
     {
         "date": "9/5/2024",
-        "description": "ik heb het gefixt"
+        "description": "aan het oppassen"
     },
     {
         "date": "01/12/2024",
@@ -14,5 +14,21 @@
     {
         "date": "01/01/01",
         "description": "overschrijven"
+    },
+    {
+        "date": "9/12/2024",
+        "description": "ik ga niet meer naar school"
+    },
+    {
+        "date": "10/12/2024",
+        "description": "ik ben aan het schaatsen"
+    },
+    {
+        "date": "15/12/2024",
+        "description": "ik ben aan het slapen nu"
+    },
+    {
+        "date": "09/09/09",
+        "description": "het is gelukt"
     }
 ]

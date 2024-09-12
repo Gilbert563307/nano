@@ -46,26 +46,6 @@ class RandomNumberGuesserController:
                 f"An error occurred [informUserAboutTheRemaningChancesLeftToGuessNumber]: {e}"
             )
 
-    def askUserForNumber(self) -> int:
-        try:
-            while True:
-                # get user input
-                option: str = input("Vul hier het getal in: \n")
-
-                # if user option is blank
-                if option.strip() == "":
-                    print("Je keuze mag niet leeg zijn:\n")
-                    continue
-
-                # Check if the input is numeric
-                if option.strip().isnumeric():
-                    return int(option)
-                else:
-                    print("Voer een geldig getal in:\n")
-
-        except Exception as e:
-            print(f"An error occurred [askUserForNumber]: {e}")
-
     def checkGuessedNumber(self, user_input: str, number_to_guess: int) -> bool:
         try:
             # check if input is een number
@@ -108,7 +88,7 @@ class RandomNumberGuesserController:
                     number_of_times_user_can_guess, times_to_guess
                 )
 
-                guessed_number: int = self.askUserForNumber()
+                guessed_number: int = self._getHelpersService().askUserForNumber()
 
                 has_user_guessed_correct: bool = self.checkGuessedNumber(
                     guessed_number, computer_generated_random_inter
