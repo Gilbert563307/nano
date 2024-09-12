@@ -300,8 +300,8 @@ class HangManController:
             # create ascii man refrence for when user doest guess the world right
             ascii_man_refrence: int = 0
 
-            # game logic here
-            for x in range(0, tries_until_game_stops):
+            # hangman game logic 
+            for x in range(0, (tries_until_game_stops + 1)):
                 # get letter from user
                 character: str = self.askUserForLetter()
 
