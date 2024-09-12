@@ -1,0 +1,6 @@
+
+gilbert;woord geraden:Ja;aantal keer:6
+thijmen;woord geraden:Ja;aantal keer:7
+test;woord geraden:Nee;aantal keer:7
+jumbo tron;woord geraden:Ja;aantal keer:6
+notebooker;woord geraden:Ja;aantal keer:6

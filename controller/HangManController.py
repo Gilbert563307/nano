@@ -10,7 +10,19 @@ import random
 class HangManController:
 
     def __init__(self) -> None:
-        pass
+        self.user_name = ""
+
+    def setUserName(self, username: str) -> None:
+        try:
+            self.user_name = username
+        except Exception as e:
+            print(f"An error occurred [getHangManAscii]: {e}")
+
+    def getUserName(self) -> str:
+        try:
+            return self.user_name
+        except Exception as e:
+            print(f"An error occurred [getHangManAscii]: {e}")
 
     def _getHelpersService(self) -> Helpers:
         return Helpers()
@@ -36,7 +48,7 @@ class HangManController:
         except Exception as e:
             print(f"An error occurred [getEasyHangManWord]: {e}")
 
-    def getHangManAscii(self):
+    def getHangManAscii(self, index):
         try:
             HANGMANPICS = [
                 """
@@ -96,7 +108,7 @@ class HangManController:
                     |
                 =========""",
             ]
-            return HANGMANPICS
+            return HANGMANPICS[index]
         except Exception as e:
             print(f"An error occurred [getHangManAscii]: {e}")
 
@@ -188,12 +200,20 @@ class HangManController:
         try:
             if len(words) == 0:
                 self._getHelpersService().printColouredMessage(
-                    "Er zijn woorden gevonden op basis van de door jou gekozen spelmodus.", Fore.RED
+                    "Er zijn woorden gevonden op basis van de door jou gekozen spelmodus.",
+                    Fore.RED,
                 )
                 self.printHangManGameOptions()
                 return
         except Exception as e:
             print(f"An error occurred [playHangManWithHardWords]: {e}")
+
+    def saveUserScore(self, score: int, won: bool) -> None:
+        try:
+            name: str = self.getUserName()
+            self._getHangManModel().saveHangmanScoreToUser(name, score, won)
+        except Exception as e:
+            print(f"An error occurred [saveUserScore]: {e}")
 
     def run(self) -> None:
         try:
@@ -208,11 +228,14 @@ class HangManController:
                 ):  # reffers to END_GAME_OPTION should actually be in a config folder but no
                     message: str = "Het spel wordt nu afgelosten \n"
                     self._getHelpersService().printColouredMessage(message, Fore.RED)
-                    self._getHelpersService().printGameOptionsToUser()
+                    self._getHelpersService().printGameOptionsToUser(True)
                     break
 
                 # ask for user name, this code will run until user fills a name in
                 user_name = self.askUserForHisName()
+
+                # set username to controller to be globally accessable
+                self.setUserName(user_name)
 
                 if user_name:
                     # chosen with easy words
@@ -256,6 +279,9 @@ class HangManController:
             # Set user tries
             tries_until_game_stops: int = 7
 
+            # set int for how many times user has guessed to keep track of score point
+            how_many_times_has_user_guessed_score: int = 0
+
             # vertel gebruiker hoeveel pogingen die heeft
             self._getHelpersService().printColouredMessage(
                 f"Je heb nog {tries_until_game_stops} pogingen.",
@@ -271,20 +297,29 @@ class HangManController:
             # create orrect_guessed_chars list
             correct_guessed_chars = []
 
+            # create ascii man refrence for when user doest guess the world right
+            ascii_man_refrence: int = 0
+
             # game logic here
             for x in range(0, tries_until_game_stops):
                 # get letter from user
                 character: str = self.askUserForLetter()
 
+                #if user has typed a character increment the score
+                if character:
+                    how_many_times_has_user_guessed_score += 1
+
                 # if the chacter is the word and the character is not already gussed by the user
-                if (
-                    character in word_to_guess
-                    and character not in correct_guessed_chars
-                ):
+                if  character in word_to_guess and character not in correct_guessed_chars:
                     # get correct gussed characters
                     self.getCorrectGuessedCharacters(
                         character, word_to_guess, correct_guessed_chars
                     )
+                else:
+                    #check if the user input char is in the word & if the character is already in the correct guessed chars list
+                    if character in word_to_guess and character in correct_guessed_chars:
+                        message: str = "Het ingevulde karakter is al gekozen"
+                        self._getHelpersService().printColouredMessage(message, Fore.RED)
 
                 # get game stats
                 stats: dict = self.getGameStats(
@@ -306,6 +341,9 @@ class HangManController:
                     # end game loop
                     tries_until_game_stops = 0
                     self.printHangManGameOptions()
+                    
+                    score: int = how_many_times_has_user_guessed_score
+                    self.saveUserScore(score, True)
                     return
 
                 # if charactet is not in word
@@ -313,12 +351,25 @@ class HangManController:
                     # remove one heart from player
                     tries_until_game_stops += -1
 
+                    # get ascii man ascii_man_refrence
+                    ascii_man = self.getHangManAscii(ascii_man_refrence)
+                    # increment ascii ascii_man_refrence by 1 because user has guessed the char wrong
+                    ascii_man_refrence += 1
+
+                    # get ascii man ascii_man_refrence
+                    print(ascii_man)
+
                     # print hearts
                     self.printGameHearts(tries_until_game_stops)
 
             # when player tries_until_game_stops get to zero the loop stops and gets here
             message: str = "Je heb verloren"
             self._getHelpersService().printColouredMessage(message, Fore.RED)
+            
+            #save user score
+            score: int = how_many_times_has_user_guessed_score
+            self.saveUserScore(score, False)
+            #print game options to user so that he can restart the game
             self.printHangManGameOptions()
             return
 

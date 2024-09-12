@@ -1,11 +1,23 @@
 from colorama import Fore, Style
 import os
+from datetime import date
 
 
 class Helpers:
 
     def __init__(self) -> None:
         pass
+    
+    def getTodaysDate() -> str:
+        try:
+            today = date.today()
+
+            # get date in (ducth) day/month/year
+            date_str: str = today.strftime("%d-%m-%Y")
+            return date_str
+        except Exception as e:
+            print(f"An error occurred [getTodaysDate]: {e}")
+
 
     def printGameOptionsToUser(self, header: bool = False):
         if header:
@@ -24,17 +36,6 @@ class Helpers:
         for message in messages:
             print(message)
 
-    def checkGuessedNumber(self, user_input: int, number_to_guess: int) -> bool:
-        # check of de optie gekozen leeg is en of het geen getal is
-        if user_input.isnumeric() == False:
-            print("De ingevoerde waarde moet een getaal zijn\n")
-
-        if user_input == "":
-            print("Het veld mag niet leeg zijn\n")
-
-        if int(user_input) == number_to_guess:
-            return True
-        return False
 
     def checkIfUserInputIsAValidInt(self, user_input: str) -> bool:
         # only checks if  input is not empty

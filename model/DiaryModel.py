@@ -1,11 +1,16 @@
 import os
 import json
+from helpers.Helpers import Helpers
 
 
 class DiaryModel:
     # initilianze
     def __init__(self):
         pass
+
+    def _getHelpersService(self) -> Helpers:
+        return Helpers()
+
 
     def getDiaryJsonFileName(self) -> str:
         file_name: str = "dagboek.json"
@@ -15,11 +20,28 @@ class DiaryModel:
         if password not in valid_password:
             return False
         return True
+    
+    def getDiaryFilePath(self) -> str:
+        try:
+            # get current folder diir
+            current_dir_path: str = (
+                self._getHelpersService().getCurrentWorkingDirFolderPath()
+            )
+            # get file name
+            file_name: str = self.getDiaryJsonFileName()
 
+            # create file path
+            file_path: str = f"{current_dir_path}\json\{file_name}"
+
+            return file_path
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [getDiaryFilePath]: {e}")
+    
     def checkIfDiaryFileExists(self) -> bool:
         try:
             # define file name
-            file_name: str = self.getDiaryJsonFileName()
+            file_name: str = self.getDiaryFilePath()
 
             # check if the file exists
             file_exists = os.path.isfile(file_name)
@@ -31,7 +53,7 @@ class DiaryModel:
 
     def createDiaryFile(self) -> bool:
         try:
-            file_name: str = self.getDiaryJsonFileName()
+            file_name: str = self.getDiaryFilePath()
 
             # create file,   x appends data to the end of the file
             file = open(file_name, "x")
@@ -47,7 +69,7 @@ class DiaryModel:
     def updateDiaryNoteBy(self, date: str, message: str) -> bool:
         try:
             # get file name
-            file_name: str = self.getDiaryJsonFileName()
+            file_name: str = self.getDiaryFilePath()
             with open(file_name) as file:
                 listObj = json.load(file)
 
@@ -77,7 +99,7 @@ class DiaryModel:
     def checkIfGivenDateIsExists(self, date: str) -> bool:
         try:
             # get file name
-            file_name: str = self.getDiaryJsonFileName()
+            file_name: str = self.getDiaryFilePath()
             with open(file_name) as file:
                 listObj = json.load(file)
             
@@ -102,7 +124,7 @@ class DiaryModel:
             json_value: list = ({"date": date, "description": message_to_save},)
 
             # get file name
-            file_name: str = self.getDiaryJsonFileName()
+            file_name: str = self.getDiaryFilePath()
 
             # check if file is empty
             is_json_file_empty: bool = self.isDiaryFileEmpty()
@@ -140,7 +162,7 @@ class DiaryModel:
     def isDiaryFileEmpty(self) -> bool:
         try:
             # get file name
-            file_name = self.getDiaryJsonFileName()
+            file_name = self.getDiaryFilePath()
             # open file in read mode
             with open(file_name, "r") as file_obj:
 
@@ -157,7 +179,7 @@ class DiaryModel:
 
     def checkIfGivenDateIsFreeInDiary(self, date_to_check: str) -> bool:
         # get file name
-        file_name = self.getDiaryJsonFileName()
+        file_name = self.getDiaryFilePath()
         # open file name
         with open(file_name, "r") as file:
             jsonData = json.load(file)
@@ -173,7 +195,7 @@ class DiaryModel:
     def getDiaryLogByDate(self, date: str) -> str:
         try:
             # get file name
-            file_name = self.getDiaryJsonFileName()
+            file_name = self.getDiaryFilePath()
             # open file name
             with open(file_name, "r") as file:
                 jsonData = json.load(file)

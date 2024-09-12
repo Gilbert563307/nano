@@ -21,13 +21,47 @@ class HangManModel:
             # Handles the exception
             print(f"An error [getHangManFileName]: {e}")
 
+    def getHangManScoreFileName(self) -> str:
+        try:
+            file_name: str = "hangmanscore.txt"
+            return file_name
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [getHangManScoreFileName]: {e}")
+
+    def saveHangmanScoreToUser(self, name: str, score: int, won: bool) -> None:
+        try:
+            # Noteer in een tekstbestand de naam van de gebruiker, of de gebruiker het woord heeft geraden, het aantal keer raden en de datum
+            file_name: str = self.getHangManScoreFilePath()
+
+            # open file in append mode
+            file = open(file_name, "a")
+
+            # get win in dutch
+            win_str: str = "Ja" if won else "Nee"
+
+            #get todays date
+            todays_date: str = self._getHelpersService().getTodaysDate()
+
+            # genrate txt to write
+            text_to_write: str = f"\n{name};woord geraden:{win_str};aantal keer:{score};datum{todays_date}"
+
+            # write to file
+            file.write(text_to_write)
+
+            # close file
+            file.close()
+
+        except Exception as e:
+            print(f"An error occurred [saveHangmanScoreToUser]: {e}")
+
     def getHangManFilePath(self) -> str:
         try:
             # get current folder diir
             current_dir_path: str = (
                 self._getHelpersService().getCurrentWorkingDirFolderPath()
             )
-            # get folder name
+            # get file name
             file_name: str = self.getHangManFileName()
 
             # create file path
@@ -37,6 +71,23 @@ class HangManModel:
         except Exception as e:
             # Handles the exception
             print(f"An error [getHangManFilePath]: {e}")
+    
+    def getHangManScoreFilePath(self) -> str:
+        try:
+            # get current folder diir
+            current_dir_path: str = (
+                self._getHelpersService().getCurrentWorkingDirFolderPath()
+            )
+            # get file name
+            file_name: str = self.getHangManScoreFileName()
+
+            # create file path
+            file_path: str = f"{current_dir_path}\json\{file_name}"
+
+            return file_path
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [getHangManScoreFilePath]: {e}")
 
     def getHangManWordsByDifficulty(self, difficulty=1) -> list[str]:
         try:
@@ -82,7 +133,6 @@ class HangManModel:
 
     def checkHangmanWordsFileExists(self) -> bool:
         try:
-
             # create file path
             file_path: str = self.getHangManFilePath()
 
