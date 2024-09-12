@@ -182,7 +182,7 @@ class HangManModel:
                 )
 
                 # return dict with info
-                return {"words": [], " message": message, "error": True}
+                return {"words": [], "message": message, "error": True}
 
             # if file exists, check if file is emoty
             is_file_empty: bool = self.checkHangmanWordsFileIsEmpty()
@@ -206,11 +206,11 @@ class HangManModel:
                     "    }\n"
                     "]"
                 )
-                return {"words": [], " message": message, "error": True}
+                return {"words": [], "message": message, "error": True}
 
             # if file exists and is not empty
             words: list[str] = self.getHangManWordsByDifficulty(difficulty)
-            return {"words": words, " message": None, "error": None}
+            return {"words": words, "message": None, "error": None}
 
         except Exception as e:
             # Handles the exception
