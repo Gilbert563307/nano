@@ -147,10 +147,10 @@ class DiaryController:
             waiting_for_user_to_enter_date: bool = True
 
             while waiting_for_user_to_enter_date:
-                # ask user for message
-                message_to_save: str = self.askUserForNote()
+                #this code wil do a recursio when the message is not valid
+                message_to_save: str = self.askUserForDateAndChechIfItsValid()
 
-                if message_to_save != "":
+                if message_to_save:
                     # check if the note is there
                     is_note_available_by_given_date: bool = (
                         self._getDiaryModel().checkIfGivenDateIsExists(message_to_save)
@@ -369,29 +369,21 @@ class DiaryController:
             allowed_options: list = [OVERRITE_EXISTING_LOG_OPTION, EXIT_OPTION]
 
             while True:
-                chosen_option_todo: str = input("")
-
-                # validae user input if its an integer
-                is_user_input_valid: (
-                    bool
-                ) = self._getHelpersService().checkIfUserInputIsAValidInt(
-                    chosen_option_todo
-                )
-
-                if is_user_input_valid == False:
-                    print("Onjuiste keuze. Probeer het opnieuw.\n")
+                chosen_option_todo: int = self._getHelpersService().askUserForNumber()
 
                 # check if has not selected 1 or 2
-                if int(chosen_option_todo) not in allowed_options:
+                if chosen_option_todo not in allowed_options:
                     print("Onjuiste keuze. Probeer het opnieuw.\n")
 
                 # if user cancels
-                if int(chosen_option_todo) == EXIT_OPTION:
-                    self._getHelpersService().printColouredMessage("Annulering \n", Fore.RED)
+                if chosen_option_todo == EXIT_OPTION:
+                    self._getHelpersService().printColouredMessage(
+                        "Annulering \n", Fore.RED
+                    )
                     self.printDiaryAppOptions()
                     break
 
-                if int(chosen_option_todo) == OVERRITE_EXISTING_LOG_OPTION:
+                if chosen_option_todo == OVERRITE_EXISTING_LOG_OPTION:
                     # save new text
                     self.promptUserToOverrideExistingNote(date_to_overide)
                     break
@@ -490,3 +482,26 @@ class DiaryController:
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [checkIfIndexIsInList]: {e}")
+
+    def askUserForDateAndChechIfItsValid(self) -> str:
+        try:
+            # ask user for message
+
+            message_to_save: str = self.askUserForNote()
+
+            is_given_date_to_search_valid: bool = (
+                self._getDiaryModel().checkIfTheSuggestedDateIsValid(message_to_save)
+            )
+
+            # if its valid
+            if is_given_date_to_search_valid:
+                return message_to_save
+
+            #if its not valid send message to user and recall this function to get the message to save
+            if is_given_date_to_search_valid == False:
+                message: str = "Onjuiste datum probeer het nog een keer.\n"
+                self._getHelpersService().printColouredMessage(message, Fore.RED)
+                return self.askUserForDateAndChechIfItsValid()
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [askUserForDateAndChechIfItsValid]: {e}")

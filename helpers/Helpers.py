@@ -51,6 +51,7 @@ class Helpers:
             "Kies (1) voor Raad het getal?",
             "Kies (2) voor je persoonlijke dagboek",
             "Kies (3) voor Galgje",
+            "Kies (4) voor de GUI",
             "Kies (10) om het nano appstore af te sluiten\n",
         ]
 
