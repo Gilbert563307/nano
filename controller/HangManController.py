@@ -1,7 +1,6 @@
 from helpers.Helpers import Helpers
 from model.HangManModel import HangManModel
 from config import config
-import re
 
 from colorama import Fore
 import random
@@ -42,7 +41,7 @@ class HangManController:
                 self._getHelpersService().printColouredMessage(
                     response["message"], Fore.RED
                 )
-                return []
+                return response["words"]
 
             return response["words"]
         except Exception as e:
@@ -124,7 +123,7 @@ class HangManController:
                 self._getHelpersService().printColouredMessage(
                     response["message"], Fore.RED
                 )
-                return []
+                return response["words"]
 
             return response["words"]
 
@@ -143,7 +142,7 @@ class HangManController:
                 self._getHelpersService().printColouredMessage(
                     response["message"], Fore.RED
                 )
-                return []
+                return response["words"]
 
             return response["words"]
         except Exception as e:
@@ -301,7 +300,7 @@ class HangManController:
             ascii_man_refrence: int = 0
 
             # hangman game logic 
-            for x in range(0, (tries_until_game_stops + 1)):
+            while tries_until_game_stops > 0:
                 # get letter from user
                 character: str = self.askUserForLetter()
 
