@@ -1,7 +1,7 @@
 from helpers.Helpers import Helpers
 from model.DiaryModel import DiaryModel
 import os
-from colorama import Fore, Style
+from colorama import Fore
 from config import config
 
 

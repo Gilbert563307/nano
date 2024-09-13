@@ -1,5 +1,5 @@
 import random
-from colorama import Fore, Style
+from colorama import Fore
 from helpers.Helpers import Helpers
 
 

@@ -2,7 +2,7 @@ from controller.RandomNumberGuesserController import RandomNumberGuesserControll
 from controller.DiaryController import DiaryController
 from controller.HangManController import HangManController
 from helpers.Helpers import Helpers
-from colorama import Fore, Style
+from colorama import Fore
 
 
 class NanoXLController:
@@ -64,6 +64,8 @@ class NanoXLController:
                 # check if de gebruiker game mode heeft gekozen voor GUI
                 if request == GUI_REQUEST:
                     print("thinker'")
+                    print("STILL WORKING ON THINKER'")
+                    
 
         except Exception as e:
             # Handles the exception
