@@ -67,10 +67,10 @@ class DiaryController:
 
             # Controleer of die datum nog vrij is(check)
             # Zo niet, vraag of de gebruiker tekst wilt toevoegen of dat de gebruiker tekst wilt herschrijven(check)
-            # Vraag de gebruiker om een stuk tekst en voeg het toe aan het bestand dagboek.json/dagboek.csv (inclusief datum)
+            # Vraag de gebruiker om een stuk tekst en voeg het toe aan het bestand dagboek.json/dagboek.csv (inclusief datum)(check)
 
-            # Geef de gebruiker de mogelijkheid om de tekst van een dag op te vragen en te lezen(TOD)
-            # Geef de gebruiker de mogelijkheid om een tekst te bewerken(TODO)
+            # Geef de gebruiker de mogelijkheid om de tekst van een dag op te vragen en te lezen(check)
+            # Geef de gebruiker de mogelijkheid om een tekst te bewerken(check)
 
             diary_opened = False
 

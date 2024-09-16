@@ -78,7 +78,7 @@ class NanoXLController:
 
             while game_started:
                 # get the user option
-                mode_selected: int = input("")
+                mode_selected: str = input("")
 
                 # check of de optie gekozen leeg is en of het geen getal is
                 if mode_selected == "" or mode_selected.isnumeric() == False:

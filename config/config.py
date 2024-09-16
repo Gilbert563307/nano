@@ -1,7 +1,7 @@
 # declare available optiopns
-EASY_WORDS_OPTION: str = 1
-AVERAGE_WORDS_OPTION: str = 2
-HARD_WORDS_OPTION: str = 3
+EASY_WORDS_OPTION: int = 1
+AVERAGE_WORDS_OPTION: int = 2
+HARD_WORDS_OPTION: int = 3
 
 # list of available options
 HANG_MAN_WORD_DIFFICULTY_OPTIONS: list[int] = [

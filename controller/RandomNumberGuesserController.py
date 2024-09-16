@@ -25,21 +25,26 @@ class RandomNumberGuesserController:
         self, lowest_guessable_number: int, highest_guessable_number: int
     ) -> None:
         try:
-            computer_generated_random_inter: int = random.randint(
+            random_number: int = random.randint(
                 lowest_guessable_number, highest_guessable_number
             )
-            return computer_generated_random_inter
+            return random_number
         except Exception as e:
             print(f"An error occurred [getRandomIntBetweenTwoNumbers]: {e}")
 
     def informUserAboutTheRemaningChancesLeftToGuessNumber(
-        selfm, number_of_times_user_can_guess: int, times_to_guess: int
+        self, number_of_times_user_can_guess: int, times_to_guess: int
     ) -> None:
         try:
             times_to_guess_calculated = number_of_times_user_can_guess - times_to_guess
-            print(
-                f"Je hebt nog {times_to_guess_calculated} {'pogingen' if times_to_guess_calculated > 1 else 'poging'}."
-            )
+            tries: str = "pogingen"
+
+            if times_to_guess_calculated == 1:
+                tries: str = "poging"
+
+            message: str = f"Je heb nog {times_to_guess_calculated} {tries} \n"
+
+            self._getHelpersService().printColouredMessage(message, Fore.BLUE)
 
         except Exception as e:
             print(
@@ -52,6 +57,19 @@ class RandomNumberGuesserController:
             if user_input == number_to_guess:
                 return True
             return False
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [checkGuessedNumber]: {e}")
+
+    def printHintsToUser(
+        self, guessed_number: int, random_generated_number: int
+    ) -> None:
+        try:
+            if guessed_number > random_generated_number:
+                message: str = "[Hint] Het getal is lager."
+            else:
+                message: str = "[Hint] Het getal is hoger"
+            self._getHelpersService().printColouredMessage(message, Fore.YELLOW)
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [checkGuessedNumber]: {e}")
@@ -70,13 +88,13 @@ class RandomNumberGuesserController:
             self.printIntroMessageToUser(
                 lowest_guessable_number, highest_guessable_number
             )
-            computer_generated_random_inter: int = self.getRandomIntBetweenTwoNumbers(
+
+            random_generated_number: int = self.getRandomIntBetweenTwoNumbers(
                 lowest_guessable_number, highest_guessable_number
             )
 
             # times user can guess
             number_of_times_user_can_guess: int = 5
-            print(f"Je krijgt 5 pogingen \n")
 
             # set variable to track is user has guessed the number correct, this is added for message tracking
             has_user_won_game: bool = False
@@ -91,18 +109,22 @@ class RandomNumberGuesserController:
                 guessed_number: int = self._getHelpersService().askUserForNumber()
 
                 has_user_guessed_correct: bool = self.checkGuessedNumber(
-                    guessed_number, computer_generated_random_inter
+                    guessed_number, random_generated_number
                 )
+
+                self.printHintsToUser(guessed_number, random_generated_number)
 
                 # check if user has guessed the number correct
                 if has_user_guessed_correct:
                     # set the tracking state to true
                     has_user_won_game = True
-                    print(Fore.GREEN + "Je heb het getaal correct geraden!!!! ")
+                    self._getHelpersService().printColouredMessage(
+                        "Je heb het getaal correct geraden!!!! ", Fore.GREEN
+                    )
 
                     # end foor loop then if user has guessed the number
                     break
-                elif has_user_guessed_correct == False:
+                else:
                     message: str = (
                         "Je heb het getal niet goed geraden probeer het nog een keer.\n"
                     )
@@ -110,13 +132,13 @@ class RandomNumberGuesserController:
 
             # if the user has not guessed the number correct
             if has_user_won_game == False:
-                print("\n")
                 self._getHelpersService().printColouredMessage(
-                    "Je heb het nummer niet geraden.", color=Fore.RED
+                    "\n Je heb het nummer niet geraden.", color=Fore.RED
                 )
 
             # closing meessage
             print("Het spel sluit zich nu af.\n")
+
             # Print NANOXL games options
             self._getHelpersService().printGameOptionsToUser(header=True)
         except Exception as e:
