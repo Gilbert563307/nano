@@ -18,10 +18,21 @@ class DiaryController:
         return DiaryModel()
 
     def printDiaryAppOptions(self) -> None:
-        print("Kies (1) om een nieuwe notitie op te slaan.")
-        print("Kies (2) om een bestaande notitie te bekijken.")
-        print("Kies (3) om een notitie te bewerken.\n")
-        print("Kies (4) om terug naar de appstore te gaan.\n")
+        print(
+            f"Kies ({config.CREATE_NEW_NOTE_TO_DIARY_OPTION}) om een nieuwe notitie op te slaan."
+        )
+        print(
+            f"Kies ({config.READ_EXISTING_NOTE_TO_DIARY_OPTION}) om een bestaande notitie te bekijken."
+        )
+        print(
+            f"Kies ({config.UPDATE_EXISTING_NOTE_IN_DIARY_OPTION}) om een notitie te bewerken"
+        )
+        print(
+            f"Kies ({config.CREATE_NEW_NOTE_WITH_TODAYS_DATE_IN_DIARY_OPTION}) om een notitie aan te maken met de datum van vandaag.\n"
+        )
+        print(
+            f"Kies ({config.DIARY_GO_BACK_TO_MAIN_MENU}) om terug naar de appstore te gaan.\n"
+        )
 
     def askUserForDiaryPassword(
         self,
@@ -100,7 +111,7 @@ class DiaryController:
                     # check if user option is false
                     if diary_menu_option not in allowed_diary_options:
                         print(
-                            "Je keuze moet een getaal tussen 1 en 4 zijn, probeer het nogmaals"
+                            f"Je keuze moet een getaal tussen 1 en {len(allowed_diary_options)} zijn, probeer het nogmaals"
                         )
 
                     # if user wants to go back to store
@@ -138,6 +149,20 @@ class DiaryController:
             # Handles the exception
             print(f"An error occurred [createNewNoteInDiary]: {e}")
 
+    def createNewNoteWithTodaysDate(self) -> None:
+        try:
+            waiting_to_create_a_note: bool = True
+
+            while waiting_to_create_a_note:
+                date_to_create: str = self._getHelpersService().getTodaysDate()
+
+                self.selfHandleDiaryNoteByGivenDate(date_to_create)
+                break
+
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [createNewNoteWithTodaysDate]: {e}")
+
     def readNoteInDiary(self) -> None:
         try:
             print(
@@ -147,7 +172,7 @@ class DiaryController:
             waiting_for_user_to_enter_date: bool = True
 
             while waiting_for_user_to_enter_date:
-                #this code wil do a recursio when the message is not valid
+                # this code wil do a recursio when the message is not valid
                 message_to_save: str = self.askUserForDateAndChechIfItsValid()
 
                 if message_to_save:
@@ -229,14 +254,17 @@ class DiaryController:
 
     def handleDiaryOptionMenuModeByGivenOption(self, mode: int):
         try:
-            if mode == config.CREATE_NEW_NOTE_IN_DIARY_MODE:
+            if mode == config.CREATE_NEW_NOTE_TO_DIARY_OPTION:
                 self.createNewNoteInDiary()
 
-            if mode == config.READ_EXISTING_NOTES_IN_DIARY_MODE:
+            if mode == config.READ_EXISTING_NOTE_TO_DIARY_OPTION:
                 self.readNoteInDiary()
 
-            if mode == config.UPDATE_EXISTING_NOTE:
+            if mode == config.UPDATE_EXISTING_NOTE_IN_DIARY_OPTION:
                 self.updateNoteInDiary()
+
+            if mode == config.CREATE_NEW_NOTE_WITH_TODAYS_DATE_IN_DIARY_OPTION:
+                self.createNewNoteWithTodaysDate()
 
         except Exception as e:
             # Handles the exception
@@ -497,7 +525,7 @@ class DiaryController:
             if is_given_date_to_search_valid:
                 return message_to_save
 
-            #if its not valid send message to user and recall this function to get the message to save
+            # if its not valid send message to user and recall this function to get the message to save
             if is_given_date_to_search_valid == False:
                 message: str = "Onjuiste datum probeer het nog een keer.\n"
                 self._getHelpersService().printColouredMessage(message, Fore.RED)
