@@ -1,6 +1,7 @@
 from colorama import Fore, Style
 import os
 from datetime import date
+from config import config
 
 
 class Helpers:
@@ -48,11 +49,11 @@ class Helpers:
             )
             self.resetTerminalColour()
         messages: list = [
-            "Kies (1) voor Raad het getal?",
-            "Kies (2) voor je persoonlijke dagboek",
-            "Kies (3) voor Galgje",
-            "Kies (4) voor de GUI",
-            "Kies (10) om het nano appstore af te sluiten\n",
+            f"Kies ({config.GUESS_THE_NUMBER_REQUEST}) voor Raad het getal?",
+            f"Kies ({config.DIARY_REQUEST}) voor je persoonlijke dagboek",
+            f"Kies ({config.HANG_REQUEST}) voor Galgje",
+            f"Kies ({config.GUI_REQUEST}) voor de GUI",
+            f"Kies ({config.CLOSE_REQUEST}) om het nano appstore af te sluiten\n",
         ]
 
         for message in messages:
