@@ -2,6 +2,7 @@ from colorama import Fore, Style
 import os
 from datetime import date
 from config import config
+from art import tprint
 
 
 class Helpers:
@@ -43,6 +44,7 @@ class Helpers:
 
     def printGameOptionsToUser(self, header: bool = False):
         if header:
+            tprint("Nano App Store")
             print(
                 Fore.GREEN
                 + "Hier kan je een keuze maken voor welke type game je wilt spelen.\n"
