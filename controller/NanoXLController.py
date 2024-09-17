@@ -27,9 +27,10 @@ class NanoXLController:
             allowed_requests = [
                 config.GUESS_THE_NUMBER_REQUEST,
                 config.DIARY_REQUEST,
-                config.HANG_REQUEST,
+                config.HANG_MAN_REQUEST,
                 config.GUI_REQUEST,
                 config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST,
+                config.HANG_MAN_BY_COMPUTER_REQUEST
             ]
 
             # check if user has not made right option between in allowed_requests
@@ -50,7 +51,7 @@ class NanoXLController:
                     controller.run()
 
                 # check if de gebruiker game mode heeft gekozen voor hangman
-                if request == config.HANG_REQUEST:
+                if request == config.HANG_MAN_REQUEST:
                     controller = HangManController()
                     controller.run()
 
@@ -63,6 +64,9 @@ class NanoXLController:
                     controller = RandomNumberGuesserController()
                     controller.runGameByComputerBot()
 
+                if request == config.HANG_MAN_BY_COMPUTER_REQUEST:
+                    controller = HangManController()
+                    controller.runGameByComputerBot()
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [handleRequest]: {e}")

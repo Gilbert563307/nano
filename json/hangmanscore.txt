@@ -16,3 +16,5 @@ james;woord geraden:Ja;aantal keer:1;datum:13-09-2024
 james;woord geraden:Ja;aantal keer:4;datum:13-09-2024
 james;woord geraden:Ja;aantal keer:3;datum:13-09-2024
 Gilbert;woord geraden:Ja;aantal keer:12;datum:16/09/2024
+james;woord geraden:Ja;aantal keer:8;datum:17/09/2024
+james;woord geraden:Nee;aantal keer:11;datum:17/09/2024

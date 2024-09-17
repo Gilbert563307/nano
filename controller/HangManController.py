@@ -330,7 +330,7 @@ class HangManController:
 
                 # get game stats
                 stats: dict = self.getGameStats(
-                    word_to_guess, character, correct_guessed_chars
+                    word_to_guess,  correct_guessed_chars
                 )
                 # print feedback about word
                 self._getHelpersService().printColouredMessage(
@@ -532,7 +532,7 @@ class HangManController:
             print(f"An error occurred [getWordPositions]: {e}")
 
     def getGameStats(
-        self, word_to_guess: str, user_inputted_character, all_ready_guessed_chars
+        self, word_to_guess: str, all_ready_guessed_chars
     ) -> dict:
         try:
             # get the positions of each letter in the word to guess
@@ -570,3 +570,11 @@ class HangManController:
 
         except Exception as e:
             print(f"An error occurred [printGameStats]: {e}")
+
+
+    def runGameByComputerBot(self) -> None:
+        try:
+
+            pass
+        except Exception as e:
+            print(f"An error occurred [runGameByComputerBot]: {e}")
