@@ -10,7 +10,7 @@ HANG_MAN_WORD_DIFFICULTY_OPTIONS: list[int] = [
     HARD_WORDS_OPTION,
 ]
 
-#when on diary option screen
+# when on diary option screen
 CREATE_NEW_NOTE_TO_DIARY_OPTION: int = 1
 READ_EXISTING_NOTE_TO_DIARY_OPTION: int = 2
 UPDATE_EXISTING_NOTE_IN_DIARY_OPTION: int = 3
@@ -26,10 +26,10 @@ ALLOWED_DIARY_OPTIONS = [
     DIARY_GO_BACK_TO_MAIN_MENU,
 ]
 
-#NanoXLController configs
+# NanoXLController configs
 GUESS_THE_NUMBER_REQUEST: int = 1
 DIARY_REQUEST: int = 2
 HANG_REQUEST: int = 3
 GUI_REQUEST: int = 4
+GUESS_THE_NUMBER_BY_COMPUTER_REQUEST: int = 5
 CLOSE_REQUEST: int = 10
-

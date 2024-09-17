@@ -32,6 +32,7 @@ class NanoXLController:
                 config.DIARY_REQUEST,
                 config.HANG_REQUEST,
                 config.GUI_REQUEST,
+                config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST
             ]
 
             # check if user has not made right option between in allowed_requests
@@ -60,6 +61,12 @@ class NanoXLController:
                 if request == config.GUI_REQUEST:
                     print("thinker'")
                     print("STILL WORKING ON THINKER'")
+                    
+                
+                if request == config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST:
+                    controller = RandomNumberGuesserController()
+                    controller.runGameByComputerBot()
+                   
 
         except Exception as e:
             # Handles the exception
