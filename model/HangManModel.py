@@ -164,9 +164,10 @@ class HangManModel:
             # if  difficulty == hard
             if difficulty == config.HARD_WORDS_OPTION:
                 # if there are no hard words set message
-                message: str = (
-                    "Er zijn geen woorden gevonden die meer dan 10 karakters bevatten."
-                )
+                if words_array_length == 0:
+                    message: str = (
+                        "Er zijn geen woorden gevonden die meer dan 10 karakters bevatten."
+                    )
 
             # return the message
             return message
