@@ -279,17 +279,11 @@ class HangManController:
             # Set user tries
             tries_until_game_stops: int = 7
 
-            # set int for how many times user has guessed to keep track of score point
-            how_many_times_has_user_guessed_score: int = 0
-
             # vertel gebruiker hoeveel pogingen die heeft
             self._getHelpersService().printColouredMessage(
                 f"Je heb nog {tries_until_game_stops} pogingen.",
                 Fore.LIGHTGREEN_EX,
             )
-
-            # TODO remove after testing
-            # print("Word:", word_to_guess, "\n")
 
             # print game status]
             self.printBeginingGameStats(word_to_guess, tries_until_game_stops)
@@ -297,84 +291,22 @@ class HangManController:
             # create orrect_guessed_chars list
             correct_guessed_chars = []
 
-            # create ascii man refrence for when user doest guess the world right
-            ascii_man_refrence: int = 0
-
             # hangman game logic
-            while tries_until_game_stops > 0:
-                # get letter from user
-                character: str = self.askUserForLetter()
+            results: dict = self.handleHangManGameLogic(
+                word_to_guess,
+                correct_guessed_chars,
+                tries_until_game_stops,
+            )
 
-                # if user has typed a character increment the score
-                if character:
-                    how_many_times_has_user_guessed_score += 1
-
-                # if the chacter is the word and the character is not already gussed by the user
-                if (
-                    character in word_to_guess
-                    and character not in correct_guessed_chars
-                ):
-                    # get correct gussed characters
-                    self.getCorrectGuessedCharacters(
-                        character, word_to_guess, correct_guessed_chars
-                    )
-                else:
-                    # check if the user input char is in the word & if the character is already in the correct guessed chars list
-                    if (
-                        character in word_to_guess
-                        and character in correct_guessed_chars
-                    ):
-                        message: str = "Het ingevulde karakter is al gekozen"
-                        self._getHelpersService().printColouredMessage(
-                            message, Fore.RED
-                        )
-
-                # get game stats
-                stats: dict = self.getGameStats(word_to_guess, correct_guessed_chars)
-                # print feedback about word
+            if results["won"]:
                 self._getHelpersService().printColouredMessage(
-                    stats["message"], Fore.BLUE
+                    results["message"], Fore.GREEN
+                )
+            else:
+                self._getHelpersService().printColouredMessage(
+                    results["message"], Fore.RED
                 )
 
-                # check if the the player has already gussed the word
-                player_has_won_game: bool = self.checkIfPlayerHasWonGame(
-                    stats["word"], word_to_guess
-                )
-
-                if player_has_won_game:
-                    message: str = "Je heb gewonnen"
-                    self._getHelpersService().printColouredMessage(message, Fore.GREEN)
-                    # end game loop
-                    tries_until_game_stops = 0
-                    self.printHangManGameOptions()
-
-                    score: int = how_many_times_has_user_guessed_score
-                    self.saveUserScore(score, True)
-                    return
-
-                # if charactet is not in word
-                if character not in word_to_guess:
-                    # remove one heart from player
-                    tries_until_game_stops += -1
-
-                    # get ascii man ascii_man_refrence
-                    ascii_man = self.getHangManAscii(ascii_man_refrence)
-                    # increment ascii ascii_man_refrence by 1 because user has guessed the char wrong
-                    ascii_man_refrence += 1
-
-                    # get ascii man ascii_man_refrence
-                    print(ascii_man)
-
-                    # print hearts
-                    self.printGameHearts(tries_until_game_stops)
-
-            # when player tries_until_game_stops get to zero the loop stops and gets here
-            message: str = f"Je hebt verloren. Het juiste woord was: {word_to_guess}"
-            self._getHelpersService().printColouredMessage(message, Fore.RED)
-
-            # save user score
-            score: int = how_many_times_has_user_guessed_score
-            self.saveUserScore(score, False)
             # print game options to user so that he can restart the game
             self.printHangManGameOptions()
             return
@@ -456,7 +388,7 @@ class HangManController:
         except Exception as e:
             print(f"An error occurred [getAlfabetToDisplay]: {e}")
 
-    def getCorrectGuessedCharacters(
+    def updateCorrectGuessedCharacters(
         self, character: str, word_to_guess: str, correct_guessed_chars: list[str]
     ) -> list[str]:
         try:
@@ -474,7 +406,7 @@ class HangManController:
                 correct_guessed_chars.append(character)
 
         except Exception as e:
-            print(f"An error occurred [getCorrectGuessedCharacters]: {e}")
+            print(f"An error occurred [updateCorrectGuessedCharacters]: {e}")
 
     def checkIfPlayerHasWonGame(
         self, guessed_word: list[str], word_to_guess: str
@@ -514,10 +446,18 @@ class HangManController:
         except Exception as e:
             print(f"An error occurred [printGameHearts]: {e}")
 
-    def getWordPositions(self, word_to_guess: str) -> list[dict]:
+    def getLettersPositionsFromWord(self, word_to_guess: str) -> list[dict]:
+        """
+        returns a list that contains a dict, for each letter, and has the letter as key, and the index of the letter
+        as the key
+
+        Example: word_to_guess = "Test" > returns list [{T: 0}, {e: 1}, {s: 2}, {t: 3}]
+
+        Returns:
+            list[str]: _description_
+        """
         try:
-            # create a list, and push dicts into it that contain each letter in the word to gusess and gives that character
-            # a position as if that word is listed. example list(word_to_guess) gives each character an index
+
             dict_data: list[dict] = []
 
             pos = -1
@@ -528,12 +468,14 @@ class HangManController:
 
             return dict_data
         except Exception as e:
-            print(f"An error occurred [getWordPositions]: {e}")
+            print(f"An error occurred [getLettersPositionsFromWord]: {e}")
 
     def getGameStats(self, word_to_guess: str, all_ready_guessed_chars) -> dict:
         try:
             # get the positions of each letter in the word to guess
-            word_postions: list[dict] = self.getWordPositions(word_to_guess)
+            lettters_postions: list[dict] = self.getLettersPositionsFromWord(
+                word_to_guess
+            )
 
             # create the underscores to show to ther user
             keybaord_len_word: str = ""
@@ -546,7 +488,7 @@ class HangManController:
             list_keybaord_len_word = list(keybaord_len_word)
 
             # loop through all the dict data with the character and each position index
-            for dict_data in word_postions:
+            for dict_data in lettters_postions:
                 # loop through the already guessed chars
                 for char in all_ready_guessed_chars:
                     # if char in already gussed char macthes
@@ -608,6 +550,26 @@ class HangManController:
         except Exception as e:
             print(f"An error occurred [getRandomLetter]: {e}")
 
+    def handleLosingGameScore(
+        self,
+        ascii_man_refrence: int,
+        score: int,
+        tries_until_game_stops: int,
+        times_to_guess: int,
+    ) -> dict:
+        try:
+
+            # get ascii man ascii_man_refrence
+            ascii_man = self.getHangManAscii(ascii_man_refrence)
+            # increment ascii ascii_man_refrence by 1 because user has guessed the char wrong
+            ascii_man_refrence += 1
+            score += 1
+            hearts: str = (tries_until_game_stops + 1) - times_to_guess
+            return {"hearts": hearts, "ascii_man": ascii_man, "score": score}
+
+        except Exception as e:
+            print(f"An error occurred [handleLosingGameScore]: {e}")
+
     def handleComputerGameLogic(
         self,
         tries_until_game_stops: int,
@@ -615,11 +577,12 @@ class HangManController:
         correct_guessed_chars: list[str],
     ) -> dict:
         try:
+            # listen for bot score
+            score: int = 0
+
             # create ascii man refrence for when user doest guess the world right
             ascii_man_refrence: int = 0
 
-            # bot score
-            score: int = 0
             for times_to_guess in range((tries_until_game_stops + 1)):
                 # make loop go slower by 2 seconds
                 time.sleep(2)
@@ -627,8 +590,8 @@ class HangManController:
                 # get radnom letter from bot
                 character: str = self.getRandomLetter()
 
-                self.handleGameLogic(
-                    character, score, word_to_guess, correct_guessed_chars
+                self.handleCharactersGameLogic(
+                    character, word_to_guess, correct_guessed_chars
                 )
 
                 # get game stats
@@ -646,10 +609,97 @@ class HangManController:
 
                 if has_bot_won_game:
                     self.saveUserScore(score, True)
+                    return {"message": "De bot heeft gewonnen", "won": True}
+
+                if character not in word_to_guess:
+                    results: dict = self.handleLosingGameScore(
+                        ascii_man_refrence,
+                        score,
+                        tries_until_game_stops,
+                        times_to_guess,
+                    )
+
+                    print(results["ascii_man"])
+                    # print hearts
+                    self.printGameHearts(results["hearts"])
+                    # set score
+                    score = results["score"]
+
+            message: str = f"De bot heeft verloren. Het juiste woord was: {word_to_guess}"
+
+            # save user score
+            self.saveUserScore(score, False)
+            return {"message": message, "won": False}
+        except Exception as e:
+            print(f"An error occurred [handleComputerGameLogic]: {e}")
+
+    def handleCharactersGameLogic(
+        self,
+        character: str,
+        word_to_guess: str,
+        correct_guessed_chars: list[str],
+    ) -> None:
+        try:
+            # if the chacter is the word and the character is not already gussed by the bot
+            if character in word_to_guess and character not in correct_guessed_chars:
+                # get correct gussed characters
+                self.updateCorrectGuessedCharacters(
+                    character, word_to_guess, correct_guessed_chars
+                )
+            else:
+                # check if the user input char is in the word & if the character is already in the correct guessed chars list
+                if character in word_to_guess and character in correct_guessed_chars:
+                    message: str = "Het ingevulde karakter is al gekozen"
+                    self._getHelpersService().printColouredMessage(message, Fore.RED)
+
+        except Exception as e:
+            print(f"An error occurred [handleGameLogic]: {e}")
+
+    def handleHangManGameLogic(
+        self,
+        word_to_guess: str,
+        correct_guessed_chars: list[str],
+        tries_until_game_stops: int,
+    ) -> dict:
+        try:
+            score: int = 0
+            # create ascii man refrence for when user doest guess the world right
+            ascii_man_refrence: int = 0
+
+            while tries_until_game_stops > 0:
+                # get letter from user
+                character: str = self.askUserForLetter()
+
+                # if user has typed a character increment the score
+                if character:
+                    score += 1
+
+                # if the chacter is the word and the character is not already gussed by the user
+                self.handleCharactersGameLogic(
+                    character, word_to_guess, correct_guessed_chars
+                )
+
+                # get game stats
+                stats: dict = self.getGameStats(word_to_guess, correct_guessed_chars)
+                # print feedback about word
+                self._getHelpersService().printColouredMessage(
+                    stats["message"], Fore.BLUE
+                )
+
+                # check if the the player has already gussed the word
+                player_has_won_game: bool = self.checkIfPlayerHasWonGame(
+                    stats["word"], word_to_guess
+                )
+
+                if player_has_won_game:
+                    self.saveUserScore(score, True)
                     return {"message": "Je heb gewonnen", "won": True}
 
                 # if charactet is not in word
                 if character not in word_to_guess:
+                    # remove one heart from player
+                    tries_until_game_stops += -1
+
                     # get ascii man ascii_man_refrence
                     ascii_man = self.getHangManAscii(ascii_man_refrence)
                     # increment ascii ascii_man_refrence by 1 because user has guessed the char wrong
@@ -659,41 +709,16 @@ class HangManController:
                     print(ascii_man)
 
                     # print hearts
-                    self.printGameHearts((tries_until_game_stops + 1) - times_to_guess)
+                    self.printGameHearts(tries_until_game_stops)
 
+            # when player tries_until_game_stops get to zero the loop stops and gets here
             message: str = f"Je hebt verloren. Het juiste woord was: {word_to_guess}"
 
             # save user score
             self.saveUserScore(score, False)
             return {"message": message, "won": False}
         except Exception as e:
-            print(f"An error occurred [handleComputerGameLogic]: {e}")
-
-    def handleGameLogic(
-        self,
-        character: str,
-        score: int,
-        word_to_guess: str,
-        correct_guessed_chars: list[str],
-    ) -> None:
-        try:
-            # if user has typed a character increment the score
-            if character:
-                score += 1
-
-            # if the chacter is the word and the character is not already gussed by the user
-            if character in word_to_guess and character not in correct_guessed_chars:
-                # get correct gussed characters
-                self.getCorrectGuessedCharacters(
-                    character, word_to_guess, correct_guessed_chars
-                )
-            else:
-                # check if the user input char is in the word & if the character is already in the correct guessed chars list
-                if character in word_to_guess and character in correct_guessed_chars:
-                    message: str = "Het ingevulde karakter is al gekozen"
-                    self._getHelpersService().printColouredMessage(message, Fore.RED)
-        except Exception as e:
-            print(f"An error occurred [handleGameLogic]: {e}")
+            print(f"An error occurred [handleHangManGameLogic]: {e}")
 
     def letComputerContinueHangManWithWords(self, words: list[str]) -> None:
         try:
@@ -707,7 +732,7 @@ class HangManController:
             # Set user tries
             tries_until_game_stops: int = 7
 
-            # print game status]
+            # print game status
             self.printBeginingGameStats(word_to_guess, tries_until_game_stops)
 
             # create orrect_guessed_chars list
@@ -742,7 +767,7 @@ class HangManController:
             self.letComputerContinueHangManWithWords(words)
         except Exception as e:
             print(f"An error occurred [letComputerPlayHangManWithEasyWords]: {e}")
-    
+
     def letComputerPlayHangManWithAverageWords(self) -> None:
         try:
             # Fetch the words

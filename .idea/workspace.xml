@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="45221af5-af7c-43d8-b7ab-5e71b27448a1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/NanoXLController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/NanoXLController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/RandomNumberGuesserController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/RandomNumberGuesserController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/HangManController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/HangManController.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +61,7 @@
       <workItem from="1726487277755" duration="21000" />
       <workItem from="1726491550170" duration="239000" />
       <workItem from="1726643207795" duration="4000" />
+      <workItem from="1726824352810" duration="154000" />
     </task>
     <servers />
   </component>
