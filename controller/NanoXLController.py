@@ -1,6 +1,7 @@
 from controller.RandomNumberGuesserController import RandomNumberGuesserController
 from controller.DiaryController import DiaryController
 from controller.HangManController import HangManController
+from controller.GuiController import GuiController
 from helpers.Helpers import Helpers
 from colorama import Fore
 from config import config
@@ -57,9 +58,10 @@ class NanoXLController:
 
                 # check if de gebruiker game mode heeft gekozen voor GUI
                 if request == config.GUI_REQUEST:
-                    print("thinker'")
-                    print("STILL WORKING ON THINKER'")
+                    controller = GuiController()
+                    controller.run()
 
+                #BOT GAME MODES
                 if request == config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST:
                     controller = RandomNumberGuesserController()
                     controller.runGameByComputerBot()

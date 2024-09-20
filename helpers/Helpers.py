@@ -1,5 +1,6 @@
 from colorama import Fore, Style
 import os
+import platform
 from datetime import date
 from config import config
 from art import tprint
@@ -42,37 +43,48 @@ class Helpers:
         except Exception as e:
             print(f"An error occurred [getTodaysDate]: {e}")
 
-    def printGameOptionsToUser(self, header: bool = False):
-        if header:
-            tprint(f"{config.APP_NAME}")
-            print(
-                Fore.GREEN
-                + "Hier kan je een keuze maken voor welke type game je wilt spelen.\n"
-            )
-            self.resetTerminalColour()
-        messages: list = [
-            f"Kies ({config.GUESS_THE_NUMBER_REQUEST}) voor raad het getal?",
-            f"Kies ({config.DIARY_REQUEST}) voor je persoonlijke dagboek",
-            f"Kies ({config.HANG_MAN_REQUEST}) voor galgje",
-            f"Kies ({config.GUI_REQUEST}) voor de GUI",
-            f"Kies ({config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST}) voor raad het getal, die door de computer wordt gespeeld.",
-            f"Kies ({config.HANG_MAN_BY_COMPUTER_REQUEST}) voor galgje, die door de computer wordt gespeeld.",
-            f"Kies ({config.CLOSE_REQUEST}) om de nano appstore af te sluiten. \n",
-        ]
+    def printGameOptionsToUser(self, header: bool = False, clear_console: bool =  False):
+        try:
+            if clear_console:
+                self.clearConsole()
 
-        for message in messages:
-            print(message)
+            if header:
+                tprint(f"{config.APP_NAME}")
+                print(
+                    Fore.GREEN
+                    + "Hier kan je een keuze maken voor welke type game je wilt spelen.\n"
+                )
+                self.resetTerminalColour()
+            messages: list = [
+                f"Kies ({config.GUESS_THE_NUMBER_REQUEST}) voor raad het getal?",
+                f"Kies ({config.DIARY_REQUEST}) voor je persoonlijke dagboek",
+                f"Kies ({config.HANG_MAN_REQUEST}) voor galgje",
+                f"Kies ({config.GUI_REQUEST}) voor de GUI",
+                f"Kies ({config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST}) voor raad het getal, die door de computer wordt gespeeld.",
+                f"Kies ({config.HANG_MAN_BY_COMPUTER_REQUEST}) voor galgje, die door de computer wordt gespeeld.",
+                f"Kies ({config.CLOSE_REQUEST}) om de nano appstore af te sluiten. \n",
+            ]
+
+            for message in messages:
+                print(message)
+
+        except Exception as e:
+            print(f"An error occurred [printGameOptionsToUser]: {e}")
 
     def checkIfUserInputIsAValidInt(self, user_input: str) -> bool:
-        # only checks if  input is not empty
-        if user_input == "":
-            return False
+        try:
+            # only checks if  input is not empty
+            if user_input == "":
+                return False
 
-        # only checks if its a integer
-        if user_input.isnumeric() == False:
-            return False
+            # only checks if its a integer
+            if user_input.isnumeric() == False:
+                return False
 
-        return True
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [checkIfUserInputIsAValidInt]: {e}")
 
     def resetTerminalColour(self) -> None:
         print(Style.RESET_ALL)
@@ -88,3 +100,17 @@ class Helpers:
         except Exception as e:
             # Handles the exception
             print(f"An error [getCurrentWorkingDirFolderPath]: {e}")
+
+    def clearConsole(self):
+        try:
+            # Detect the current OS
+            current_os = platform.system()
+
+            # Run the appropriate command
+            if current_os == "Windows":
+                os.system("cls")
+            else:
+                os.system("clear")
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [clearConsole]: {e}")
