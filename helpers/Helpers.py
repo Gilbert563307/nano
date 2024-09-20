@@ -44,7 +44,7 @@ class Helpers:
 
     def printGameOptionsToUser(self, header: bool = False):
         if header:
-            tprint("Nano App Store")
+            tprint(f"{config.APP_NAME}")
             print(
                 Fore.GREEN
                 + "Hier kan je een keuze maken voor welke type game je wilt spelen.\n"

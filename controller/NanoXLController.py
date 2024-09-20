@@ -83,7 +83,7 @@ class NanoXLController:
                 mode_selected: int = self._getHelpersService().askUserForNumber()
                 if mode_selected == config.CLOSE_REQUEST:
                     self._getHelpersService().printColouredMessage(
-                        "Nano store afgesloten", Fore.MAGENTA
+                        f"{config.APP_NAME} afgesloten", Fore.MAGENTA
                     )
                     return
 

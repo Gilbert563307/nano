@@ -34,3 +34,7 @@ GUI_REQUEST: int = 4
 GUESS_THE_NUMBER_BY_COMPUTER_REQUEST: int = 5
 HANG_MAN_BY_COMPUTER_REQUEST: int = 6
 CLOSE_REQUEST: int = 10
+
+
+#app name
+APP_NAME: str = "PocketApps"
