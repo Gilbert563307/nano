@@ -53,10 +53,11 @@ class Helpers:
         messages: list = [
             f"Kies ({config.GUESS_THE_NUMBER_REQUEST}) voor raad het getal?",
             f"Kies ({config.DIARY_REQUEST}) voor je persoonlijke dagboek",
-            f"Kies ({config.HANG_MAN_REQUEST}) voor Galgje",
+            f"Kies ({config.HANG_MAN_REQUEST}) voor galgje",
             f"Kies ({config.GUI_REQUEST}) voor de GUI",
             f"Kies ({config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST}) voor raad het getal, die door de computer wordt gespeeld.",
-            f"Kies ({config.CLOSE_REQUEST}) om het nano appstore af te sluiten\n",
+            f"Kies ({config.HANG_MAN_BY_COMPUTER_REQUEST}) voor galgje, die door de computer wordt gespeeld.",
+            f"Kies ({config.CLOSE_REQUEST}) om de nano appstore af te sluiten. \n",
         ]
 
         for message in messages:

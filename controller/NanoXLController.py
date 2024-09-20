@@ -67,6 +67,8 @@ class NanoXLController:
                 if request == config.HANG_MAN_BY_COMPUTER_REQUEST:
                     controller = HangManController()
                     controller.runGameByComputerBot()
+
+
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [handleRequest]: {e}")
