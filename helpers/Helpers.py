@@ -115,23 +115,3 @@ class Helpers:
         except Exception as e:
             # Handles the exception
             print(f"An error [clearConsole]: {e}")
-
-    def getAssestsPath(self, folder: str) -> str:
-        try:
-            # OUTPUT_PATH = Path(__file__).parent
-            current_dir_path: str = self.getCurrentWorkingDirFolderPath()
-            path: str = f"{current_dir_path}/builds/{folder}/build/assets/frame0"
-            return path
-            
-        except Exception as e:
-            # Handles the exception
-            print(f"An error [getAssestsPath]: {e}")
-
-    def relativeToAssets(self, folder: str, path: str) -> Path:
-        try:
-            assets_path: str = self.getAssestsPath(folder)
-            print(f"{assets_path} assets_path" )
-            return assets_path / Path(path)
-        except Exception as e:
-            # Handles the exception
-            print(f"An error [relativeToAssets]: {e}")

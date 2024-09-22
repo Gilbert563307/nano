@@ -5,6 +5,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, Label
 from helpers.Helpers import Helpers
 from config import config
 
+
 class WeatherGuiController:
 
     # initilianze
@@ -17,9 +18,15 @@ class WeatherGuiController:
     def _getHelpersService(self) -> Helpers:
         return Helpers()
 
-    def relative_to_assets(self, path: str):
+    def relative_to_assets(self, file: str):
         try:
-            return self._getHelpersService().relativeToAssets("build_weather", path)
+            current_dir_path: str = (
+                self._getHelpersService().getCurrentWorkingDirFolderPath()
+            )
+            assets_path: str = (
+                f"{current_dir_path}/builds/build_weather/build/assets/frame0"
+            )
+            return assets_path / Path(file)
         except Exception as e:
             print(f"An error occurred [relative_to_assets]: {e}")
 
@@ -42,9 +49,9 @@ class WeatherGuiController:
             print(f"An error occurred [getCanvas]: {e}")
 
     def fetchWeather(self) -> None:
-        try: 
+        try:
             place_to_search: str = self.regio_text_field.get()
-            #get element of canvas_regio_item and change the text content
+            # get element of canvas_regio_item and change the text content
             self.getCanvas().itemconfig(self.canvas_regio_item, text=place_to_search)
         except Exception as e:
             print(f"An error occurred [fetchWeather]: {e}")
@@ -111,7 +118,7 @@ class WeatherGuiController:
 
             # TODO check if needed
 
-            #canvas: Canvas = self.getCanvas()
+            # canvas: Canvas = self.getCanvas()
 
             # entry_image_1 = PhotoImage(file=self.relative_to_assets("entry_1.png"))
             # entry_bg_1 = canvas.create_image(106.5, 160.5, image=entry_image_1)
