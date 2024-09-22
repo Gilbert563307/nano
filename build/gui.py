@@ -11,7 +11,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\ssemp\Documents\MYHU\PROG\nano\build\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\ssemp\OneDrive\Bureaublad\build\assets\frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -70,9 +70,9 @@ button_1 = Button(
     relief="flat"
 )
 button_1.place(
-    x=20.0,
+    x=5.0,
     y=85.0,
-    width=84.0,
+    width=115.0,
     height=23.0
 )
 
@@ -86,9 +86,9 @@ button_2 = Button(
     relief="flat"
 )
 button_2.place(
-    x=20.0,
+    x=5.0,
     y=119.0,
-    width=84.0,
+    width=115.0,
     height=23.0
 )
 
@@ -102,9 +102,9 @@ button_3 = Button(
     relief="flat"
 )
 button_3.place(
-    x=18.0,
+    x=3.0,
     y=194.0,
-    width=86.0,
+    width=117.0,
     height=23.0
 )
 
@@ -127,10 +127,10 @@ button_4 = Button(
     relief="flat"
 )
 button_4.place(
-    x=20.0,
-    y=158.0,
-    width=84.0,
-    height=23.0
+    x=5.0,
+    y=157.0,
+    width=115.0,
+    height=24.0
 )
 window.resizable(False, False)
 window.mainloop()

@@ -1,1 +1,3 @@
 json/hangmanscore.txt
+.env
+tests/testWindow.py
