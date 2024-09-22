@@ -12,6 +12,12 @@ class Helpers:
     def __init__(self) -> None:
         pass
 
+    def getEnvVar(self, var: str) -> str | int | float:
+        try:
+            return os.getenv(var)
+        except Exception as e:
+            print(f"An error occurred [getEnvVar]: {e}")
+
     def askUserForNumber(self) -> int:
         try:
             while True:

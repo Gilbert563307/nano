@@ -1,9 +1,10 @@
 from pathlib import Path
 
 # from tkinter import *
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, Label
+from tkinter import Tk, Canvas, Entry, Text, Button, Frame
 from helpers.Helpers import Helpers
 from config import config
+from model.WeatherModel import WeatherModel
 
 
 class WeatherGuiController:
@@ -14,9 +15,18 @@ class WeatherGuiController:
         self.canvas = None
         self.regio_text_field = None
         self.canvas_regio_item = None
+        self.canvas_humidity_item = None
+        self.canvas_wind_speed_item = None
+        self.canvas_temp_item = None
 
     def _getHelpersService(self) -> Helpers:
         return Helpers()
+
+    def _getWeatherModel(self) -> WeatherModel:
+        try:
+            return WeatherModel()
+        except Exception as e:
+            print(f"An error occurred [_getWeatherModel]: {e}")
 
     def relative_to_assets(self, file: str):
         try:
@@ -51,8 +61,19 @@ class WeatherGuiController:
     def fetchWeather(self) -> None:
         try:
             place_to_search: str = self.regio_text_field.get()
+            response: dict = self._getWeatherModel().fetchWeatherDataByParam(
+                place_to_search
+            )
             # get element of canvas_regio_item and change the text content
-            self.getCanvas().itemconfig(self.canvas_regio_item, text=place_to_search)
+            self.getCanvas().itemconfig(self.canvas_regio_item, text=response["region"])
+            self.getCanvas().itemconfig(
+                self.canvas_humidity_item, text=response["humidity"]
+            )
+            self.getCanvas().itemconfig(
+                self.canvas_wind_speed_item, text=response["wind_speed"]
+            )
+            self.getCanvas().itemconfig(self.canvas_temp_item, text=response["temp"])
+
         except Exception as e:
             print(f"An error occurred [fetchWeather]: {e}")
 
