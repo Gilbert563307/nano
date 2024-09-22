@@ -4,10 +4,12 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, Label
 from helpers.Helpers import Helpers
 from config import config
+from controller.WeatherGuiController import WeatherGuiController
+
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(
-    r"C:\Users\ssemp\Documents\MYHU\PROG\nano\build\assets\frame0"
+    r"C:\Users\ssemp\Documents\MYHU\PROG\nano\builds\build_main\assets\frame0"
 )
 
 
@@ -92,13 +94,12 @@ class GuiController:
             weather_frame = self.weather_frame = Frame(
                 self.getRootWindow(), bg="white", height=700, width=700
             )
-            label = Label(
-                weather_frame, text="This is Frame for weather", bg="lightgreen"
-            )
-            label.pack(pady=20)
+            
+            controller: WeatherGuiController = WeatherGuiController()
+            controller.run(weather_frame)
 
-            button_to_frame1 = Button(self.getWeatherFrame(), text="Back to Frame 1", command=self.openMainFrame)
-            button_to_frame1.pack(pady=20)
+            button_to_frame1 = Button(self.getWeatherFrame(), text="Terug", command=self.openMainFrame)
+            button_to_frame1.pack(pady=75)
 
         except Exception as e:
             print(f"An error occurred [createWeatherFrame]: {e}")

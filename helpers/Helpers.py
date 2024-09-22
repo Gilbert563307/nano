@@ -4,6 +4,7 @@ import platform
 from datetime import date
 from config import config
 from art import tprint
+from pathlib import Path
 
 
 class Helpers:
@@ -43,7 +44,7 @@ class Helpers:
         except Exception as e:
             print(f"An error occurred [getTodaysDate]: {e}")
 
-    def printGameOptionsToUser(self, header: bool = False, clear_console: bool =  False):
+    def printGameOptionsToUser(self, header: bool = False, clear_console: bool = False):
         try:
             if clear_console:
                 self.clearConsole()
@@ -114,3 +115,10 @@ class Helpers:
         except Exception as e:
             # Handles the exception
             print(f"An error [clearConsole]: {e}")
+
+    def relativeToAssets(self, assets_path: str, path: str) -> Path:
+        try:
+            return assets_path / Path(path)
+        except Exception as e:
+            # Handles the exception
+            print(f"An error [relativeToAssets]: {e}")
