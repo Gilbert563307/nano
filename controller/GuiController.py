@@ -7,12 +7,6 @@ from config import config
 from controller.WeatherGuiController import WeatherGuiController
 
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(
-    r"C:\Users\ssemp\Documents\MYHU\PROG\nano\builds\build_main\assets\frame0"
-)
-
-
 class GuiController:
     # initilianze
     def __init__(self):
@@ -33,8 +27,12 @@ class GuiController:
     def _getHelpersService(self) -> Helpers:
         return Helpers()
 
-    def relative_to_assets(self, path: str) -> Path:
-        return ASSETS_PATH / Path(path)
+    def relative_to_assets(self, file: str) -> Path:
+        current_dir_path: str = (
+            self._getHelpersService().getCurrentWorkingDirFolderPath()
+        )
+        assets_path: str = f"{current_dir_path}/builds/build_main/assets/frame0"
+        return assets_path / Path(file)
 
     def getRootWindow(self):
         try:
@@ -81,7 +79,7 @@ class GuiController:
 
     def openMainFrame(self) -> bool:
         try:
-            #close weather frame
+            # close weather frame
             self.getWeatherFrame().pack_forget()
 
             self.getMainFrame().pack(fill="both", expand=True)
@@ -94,11 +92,13 @@ class GuiController:
             weather_frame = self.weather_frame = Frame(
                 self.getRootWindow(), bg="white", height=700, width=700
             )
-            
+
             controller: WeatherGuiController = WeatherGuiController()
             controller.run(weather_frame)
 
-            button_to_frame1 = Button(self.getWeatherFrame(), text="Terug", command=self.openMainFrame)
+            button_to_frame1 = Button(
+                self.getWeatherFrame(), text="Terug", command=self.openMainFrame
+            )
             button_to_frame1.pack(pady=75)
 
         except Exception as e:
@@ -221,7 +221,7 @@ class GuiController:
                 text="Hello",
                 borderwidth=0,
                 highlightthickness=0,
-                command= self.openWeatherFrame,
+                command=self.openWeatherFrame,
                 relief="flat",
             )
             button_1.place(x=5.0, y=85.0, width=115.0, height=23.0)
@@ -317,5 +317,3 @@ class GuiController:
             self.initUI()
         except Exception as e:
             print(f"An error occurred [GuiController-run]: {e}")
-
-    
