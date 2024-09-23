@@ -182,7 +182,7 @@ class WeatherGuiController:
         try:
             canvas: Canvas = self.getCanvas()
             canvas_regio_item = canvas.create_text(
-                273.0,
+                245.0,
                 262.0,
                 anchor="nw",
                 text="Regio: ",
@@ -264,5 +264,6 @@ class WeatherGuiController:
         try:
             self.setFrame(frame)
             self.initUI()
+            self._getHelpersService().printGameOptionsToUser(header=True, clear_console=True)
         except Exception as e:
             print(f"An error occurred [run]: {e}")
