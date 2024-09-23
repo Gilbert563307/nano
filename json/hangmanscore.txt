@@ -1,2 +1,3 @@
 
 Vincent;woord geraden:Ja;aantal keer:7;datum:22/09/2024
+BOT;woord geraden:Nee;aantal keer:7;datum:23/09/2024

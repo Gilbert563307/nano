@@ -58,6 +58,12 @@ class GuiController:
         except Exception as e:
             print(f"An error occurred [getWeatherFrame]: {e}")
 
+    def getFilmRouleteFrame(self):
+        try:
+            return self.filmroulete_frame
+        except Exception as e:
+            print(f"An error occurred [getFilmRouleteFrame]: {e}")
+
     def openWeatherFrame(self):
         try:
             main_frame: Frame = self.getMainFrame()
@@ -67,6 +73,17 @@ class GuiController:
             weather_frame.pack(fill="both", expand=True)
         except Exception as e:
             print(f"An error occurred [openWeatherFrame]: {e}")
+
+    def openFilmRouleteFrame(self):
+        try:
+            main_frame: Frame = self.getMainFrame()
+            main_frame.pack_forget()
+
+            film_roulete_frame: Frame = self.getFilmRouleteFrame()
+            film_roulete_frame.pack(fill="both", expand=True)
+        except Exception as e:
+            print(f"An error occurred [openFilmRouleteFrame]: {e}")
+
 
     def createMainFrame(self):
         try:
@@ -104,33 +121,7 @@ class GuiController:
         except Exception as e:
             print(f"An error occurred [createWeatherFrame]: {e}")
 
-    def createChatBotFrame(self):
-        try:
-            # create frame for chatbot
-            chatbot_frame = self.chatbot_frame = Frame(
-                self.getRootWindow(), bg="white", height=700, width=700
-            )
-            label = Label(
-                chatbot_frame, text="This is Frame for chat bot", bg="lightgreen"
-            )
-            label.pack(pady=20)
-
-        except Exception as e:
-            print(f"An error occurred [createChatBotFrame]: {e}")
-
-    def createNewsFrame(self) -> bool:
-        try:
-            # create frame for news frame
-            news_frame = self.news_frame = Frame(
-                self.getRootWindow(), bg="white", height=700, width=700
-            )
-            label = Label(news_frame, text="This is Frame for news", bg="lightgreen")
-            label.pack(pady=20)
-            return True
-
-        except Exception as e:
-            print(f"An error occurred [createNewsFrame]: {e}")
-
+  
     def createFilmRouleteFrame(self) ->bool:
         try:
             # create frame for film roullete
@@ -150,8 +141,8 @@ class GuiController:
             # create frame for weather
             self.createMainFrame()
             self.createWeatherFrame()
-            self.createChatBotFrame()
-            self.createNewsFrame()
+            # self.createChatBotFrame()
+            # self.createNewsFrame()
             self.createFilmRouleteFrame()
             return True
         except Exception as e:
@@ -244,7 +235,7 @@ class GuiController:
                 image=self.button_image_4,
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda: print("Button 4 clicked"),
+                command=self.openFilmRouleteFrame,
                 relief="flat",
             )
             button_4.place(x=5.0, y=119.0, width=115.0, height=23.0)
