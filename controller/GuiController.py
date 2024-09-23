@@ -230,46 +230,6 @@ class GuiController:
         except Exception as e:
             print(f"An error occurred [createWeatherButton]: {e}")
 
-    def createChatBotButton(self) -> bool:
-        try:
-            frame: Frame = self.getMainFrame()
-
-            self.button_image_2 = PhotoImage(
-                file=self.relative_to_assets("button_2.png")
-            )
-            button_2 = Button(
-                frame,
-                image=self.button_image_2,
-                borderwidth=0,
-                highlightthickness=0,
-                command=lambda: print("Button 2 clicked"),
-                relief="flat",
-            )
-            button_2.place(x=5.0, y=119.0, width=115.0, height=23.0)
-
-            return True
-        except Exception as e:
-            print(f"An error occurred [createChatBotButton]: {e}")
-
-    def createNewsButton(self) -> bool:
-        try:
-            frame: Frame = self.getMainFrame()
-
-            self.button_image_3 = PhotoImage(
-                file=self.relative_to_assets("button_3.png")
-            )
-            button_3 = Button(
-                frame,
-                image=self.button_image_3,
-                borderwidth=0,
-                highlightthickness=0,
-                command=lambda: print("Button 3 clicked"),
-                relief="flat",
-            )
-            button_3.place(x=3.0, y=194.0, width=117.0, height=23.0)
-        except Exception as e:
-            print(f"An error occurred [createNewsButton]: {e}")
-
     def createFilmRouleteButton(self) -> bool:
         try:
             frame: Frame = self.getMainFrame()
@@ -285,7 +245,8 @@ class GuiController:
                 command=lambda: print("Button 4 clicked"),
                 relief="flat",
             )
-            button_4.place(x=5.0, y=157.0, width=115.0, height=24.0)
+            button_4.place(x=5.0, y=119.0, width=115.0, height=23.0)
+            #button_4.place(x=5.0, y=157.0, width=115.0, height=24.0)
         except Exception as e:
             print(f"An error occurred [createFilmRouleteButton]: {e}")
 
@@ -299,8 +260,6 @@ class GuiController:
 
             # add buttons
             self.createWeatherButton()
-            self.createChatBotButton()
-            self.createNewsButton()
             self.createFilmRouleteButton()
 
             # Prevent window from being resized
