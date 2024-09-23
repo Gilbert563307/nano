@@ -71,9 +71,10 @@ class FilmRouleteController:
 
     def createSearchButton(self) -> bool:
         try:
-            button_image_1 = PhotoImage(file=self.relative_to_assets("button_1.png"))
+            canvas: Canvas = self.getCanvas()
             button_1 = Button(
-                image=button_image_1,
+                canvas,
+                text="Zoeken",
                 borderwidth=0,
                 highlightthickness=0,
                 command= self.getRandomFilm,
@@ -152,7 +153,7 @@ class FilmRouleteController:
         try:
             canvas: Canvas = self.getCanvas()
             canvas_description_item = canvas.create_text(
-                273.0,
+                0,
                 134.0,
                 anchor="nw",
                 text="Omschrijving",
@@ -171,7 +172,6 @@ class FilmRouleteController:
             self._getHelpersService().printGameOptionsToUser(
                 header=True, clear_console=True
             )
-            frame.res
         except Exception as e:
 
             print(f"An error occurred [run]: {e}")

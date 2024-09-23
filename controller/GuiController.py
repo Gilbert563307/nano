@@ -5,6 +5,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, Label
 from helpers.Helpers import Helpers
 from config import config
 from controller.WeatherGuiController import WeatherGuiController
+from controller.FilmRouleteController import FilmRouleteController
 
 
 class GuiController:
@@ -71,6 +72,7 @@ class GuiController:
 
             weather_frame: Frame = self.getWeatherFrame()
             weather_frame.pack(fill="both", expand=True)
+           
         except Exception as e:
             print(f"An error occurred [openWeatherFrame]: {e}")
 
@@ -83,7 +85,6 @@ class GuiController:
             film_roulete_frame.pack(fill="both", expand=True)
         except Exception as e:
             print(f"An error occurred [openFilmRouleteFrame]: {e}")
-
 
     def createMainFrame(self):
         try:
@@ -98,6 +99,7 @@ class GuiController:
         try:
             # close weather frame
             self.getWeatherFrame().pack_forget()
+            self.getFilmRouleteFrame().pack_forget()
 
             self.getMainFrame().pack(fill="both", expand=True)
             return True
@@ -106,13 +108,16 @@ class GuiController:
 
     def createWeatherFrame(self):
         try:
-            weather_frame = self.weather_frame = Frame(
+            weather_frame =  Frame(
                 self.getRootWindow(), bg="white", height=700, width=700
             )
+
+            self.weather_frame = weather_frame
 
             controller: WeatherGuiController = WeatherGuiController()
             controller.run(weather_frame)
 
+            # add back button
             button_to_frame1 = Button(
                 self.getWeatherFrame(), text="Terug", command=self.openMainFrame
             )
@@ -121,17 +126,20 @@ class GuiController:
         except Exception as e:
             print(f"An error occurred [createWeatherFrame]: {e}")
 
-  
-    def createFilmRouleteFrame(self) ->bool:
+    def createFilmRouleteFrame(self) -> bool:
         try:
             # create frame for film roullete
-            filmroulete_frame = self.filmroulete_frame = Frame(
+            filmroulete_frame: Frame = Frame(
                 self.getRootWindow(), bg="white", height=700, width=700
             )
-            label = Label(
-                filmroulete_frame, text="This is Frame for roullete", bg="lightgreen"
+            self.filmroulete_frame = filmroulete_frame
+            controller: FilmRouleteController = FilmRouleteController()
+            controller.run(filmroulete_frame)
+
+            button_to_frame1 = Button(
+                self.getFilmRouleteFrame(), text="Terug", command=self.openMainFrame
             )
-            label.pack(pady=20)
+            button_to_frame1.pack(pady=75)
             return True
         except Exception as e:
             print(f"An error occurred [createFilmRouleteFrame]: {e}")
@@ -240,7 +248,7 @@ class GuiController:
             )
             button_4.place(x=5.0, y=119.0, width=115.0, height=23.0)
             return True
-            #button_4.place(x=5.0, y=157.0, width=115.0, height=24.0)
+            # button_4.place(x=5.0, y=157.0, width=115.0, height=24.0)
         except Exception as e:
             print(f"An error occurred [createFilmRouleteButton]: {e}")
 
