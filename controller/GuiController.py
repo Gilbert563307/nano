@@ -118,7 +118,7 @@ class GuiController:
         except Exception as e:
             print(f"An error occurred [createChatBotFrame]: {e}")
 
-    def createNewsFrame(self):
+    def createNewsFrame(self) -> bool:
         try:
             # create frame for news frame
             news_frame = self.news_frame = Frame(
@@ -126,11 +126,12 @@ class GuiController:
             )
             label = Label(news_frame, text="This is Frame for news", bg="lightgreen")
             label.pack(pady=20)
+            return True
 
         except Exception as e:
             print(f"An error occurred [createNewsFrame]: {e}")
 
-    def createFilmRouleteFrame(self):
+    def createFilmRouleteFrame(self) ->bool:
         try:
             # create frame for film roullete
             filmroulete_frame = self.filmroulete_frame = Frame(
@@ -140,7 +141,7 @@ class GuiController:
                 filmroulete_frame, text="This is Frame for roullete", bg="lightgreen"
             )
             label.pack(pady=20)
-
+            return True
         except Exception as e:
             print(f"An error occurred [createFilmRouleteFrame]: {e}")
 
@@ -202,6 +203,7 @@ class GuiController:
             canvas: Canvas = self.getMainCanvas()
             # Create hr line
             canvas.create_rectangle(0.0, 53.0, 725.0, 55.0, fill="#D9D9D9", outline="")
+            return True
         except Exception as e:
             print(f"An error occurred [createHr]: {e}")
 
@@ -246,6 +248,7 @@ class GuiController:
                 relief="flat",
             )
             button_4.place(x=5.0, y=119.0, width=115.0, height=23.0)
+            return True
             #button_4.place(x=5.0, y=157.0, width=115.0, height=24.0)
         except Exception as e:
             print(f"An error occurred [createFilmRouleteButton]: {e}")
