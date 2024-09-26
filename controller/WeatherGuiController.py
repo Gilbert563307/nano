@@ -137,13 +137,6 @@ class WeatherGuiController:
         try:
             frame: Frame = self.getFrame()
 
-            # TODO check if needed
-
-            # canvas: Canvas = self.getCanvas()
-
-            # entry_image_1 = PhotoImage(file=self.relative_to_assets("entry_1.png"))
-            # entry_bg_1 = canvas.create_image(106.5, 160.5, image=entry_image_1)
-
             entry_1 = Entry(
                 frame, bd=0, bg="#E3E3E3", fg="#000716", highlightthickness=0
             )
