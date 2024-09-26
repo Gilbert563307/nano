@@ -1,37 +1,50 @@
-import tkinter as tk
+import random
 
-# Function to switch between frames
-def open_frame1():
-    frame2.pack_forget()  # Hide frame2 if it's visible
-    frame1.pack(fill="both", expand=True)  # Show frame1
 
-def open_frame2():
-    frame1.pack_forget()  # Hide frame1 if it's visible
-    frame2.pack(fill="both", expand=True)  # Show frame2
+rows = 6
+sudoku_list = []
 
-# Create the main window
-root = tk.Tk()
-root.title("Main Window")
-root.geometry("400x300")  # Set the size of the main window
+# for row in range(rows):
 
-# Create two frames
-frame1 = tk.Frame(root, bg="lightblue")
-frame2 = tk.Frame(root, bg="lightgreen")
+#     # vcerate empty list
+#     empty_list = []
+#     # append empty list
+#     sudoku_list.append(empty_list)
+#     row_list = sudoku_list[row]
 
-# Add content to frame 1
-label1 = tk.Label(frame1, text="This is Frame 1", bg="lightblue")
-label1.pack(pady=20)
-button_to_frame2 = tk.Button(frame1, text="Go to Frame 2", command=open_frame2)
-button_to_frame2.pack(pady=20)
+    # for i in range(3):
+    #     row_list = sudoku_list[row]
 
-# Add content to frame 2
-label2 = tk.Label(frame2, text="This is Frame 2", bg="lightgreen")
-label2.pack(pady=20)
-button_to_frame1 = tk.Button(frame2, text="Go to Frame 1", command=open_frame1)
-button_to_frame1.pack(pady=20)
+    #     random_int = random.randint(0, 9)
 
-# Start by showing frame 1
-frame1.pack(fill="both", expand=True)
+    #     if i == random.randint(0, 2):
+    #         random_int = 0
 
-# Start the Tkinter event loop
-root.mainloop()
+    #     row_list.append(random_int)
+
+    #     if row == 1:
+    #         if random_int not in row_list:
+    #             row_list.append(random_int)
+    #     else:
+    #         if random_int not in row_list and row_list != sudoku_list[len(sudoku_list) -1]:
+    #             row_list.append(random_int)
+
+    # # if is last row
+    # if row == 5:
+    #     if random_int not in row_list:
+    #         for arr in sudoku_list:
+    #             for num in arr:
+    #                 if random_int != num:
+    #                     row_list.append(random_int)
+
+
+column_one = []
+column_two = []
+column_three = []
+while len(column_one) < 6:
+    random_int = random.randint(0, 9)
+    if random_int not in column_one:
+        column_one.append(random_int)
+
+print(column_one)
+

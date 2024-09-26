@@ -63,8 +63,8 @@ class DiaryController:
                 if is_pass_word_correct:
                     return True
 
-            print("Onjuiste wachtwoord het dagboek wordt nu afgesloten.\n")
-            self._getHelpersService().printGameOptionsToUser()  # TOO ASK IF NEEDED TO END GAME LOOP
+            self._getHelpersService().printColouredMessage("Onjuiste wachtwoord het dagboek wordt nu afgesloten.\n", Fore.RED)
+            self._getHelpersService().printGameOptionsToUser()
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [askUserForDiaryPassword]: {e}")
