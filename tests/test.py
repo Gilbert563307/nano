@@ -3,155 +3,141 @@ import pprint
 import string
 
 
-VALUES_IN_EACH_LIST = 3
+class SudokuController:
 
+    def __init__(self) -> None:
+        self.grid_keys_location = []
+        self.grid_rows: list = []
+        self.grid_columns: list = []
 
-def createSudokuList() -> list:
-    ROWS = 27
-    # COLUMNS = 9
-    sudoku_list = []
+    def getAlfabet(self) -> list[str]:
+        return ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 
-    for row_in_rows in range(ROWS):
-        row_list = []
-        for index_in_list in range(VALUES_IN_EACH_LIST):
-            row_list.append(0)
-        sudoku_list.append(row_list)
+    def getUniqueGrid(self) -> list[int]:
+        unique_columns_and_not_unique_rows = [[] for _ in range(9)]
+        unique_rows_and_columns = [[] for _ in range(9)]
 
-    return sudoku_list
+        grid_columns = [[] for _ in range(9)]
 
+        for col in unique_columns_and_not_unique_rows:
+            for index in range(9):
+                random_int = random.randint(0, 9)
+                # # create unqie column but not a row
+                if random_int not in col:
+                    col.append(random_int)
+                else:
+                    col.append(0)
 
-def getSudokiListWithNumbers() -> list:
-    sudoku_list = createSudokuList()
-    column_one = []
-    column_two = []
-    column_three = []
+                # turn each column into a unique row: else append 0
+                first_item_of_each_colum = col[index]
 
-    sudoku_list_arr_counter = 0
+                if first_item_of_each_colum not in unique_rows_and_columns[index]:
+                    unique_rows_and_columns[index].append(first_item_of_each_colum)
+                else:
+                    unique_rows_and_columns[index].append(0)
 
-    rows = []
+        for list in unique_rows_and_columns:
+            for index in range(9):
+                first_item_of_each_list = list[index]
+                grid_columns[index].append(first_item_of_each_list)
 
-    for list in sudoku_list:
-        random_int = random.randint(1, 9)
+        # set rows and columns to global state
+        self.grid_columns = grid_columns
+        self.grid_rows = unique_rows_and_columns
 
-        for index_in_list in range(VALUES_IN_EACH_LIST):
-            # creates each list with unique number
+        return unique_rows_and_columns
 
-            if random_int not in list:
-                # add numbers in each columns
+    def getGridKeysAndLocation(self, rows: list) -> dict:
+        grid_keys_location: list = []
+        row_count: int = 1
+        alfabet = self.getAlfabet()
+        for row in rows:
+            for index in range(9):
+                item_of_each_column = row[index]
+                key = f"{alfabet[index]}"
+                key_location = {
+                    "key": key,
+                    "row": row_count,
+                    "number": item_of_each_column,
+                }
 
-                if index_in_list == 0 and random_int not in column_one:
-                    column_one.append(random_int)
-                    list[index_in_list] = random_int
+                grid_keys_location.append(key_location)
+            row_count += 1
 
-                if index_in_list == 1 and random_int not in column_two:
-                    column_two.append(random_int)
-                    list[index_in_list] = random_int
+        return grid_keys_location
 
-                if index_in_list == 2 and random_int not in column_three:
-                    column_three.append(random_int)
-                    list[index_in_list] = random_int
+    def getColumnsAndHeaders(self) -> dict:
+        rows = self.getUniqueGrid()
+        grid_keys_location = self.getGridKeysAndLocation(rows)
 
-        sudoku_list_arr_counter += 1
-    # print(f" rows {rows}")
+        self.grid_keys_location = grid_keys_location
+        return {"grid_keys_location": grid_keys_location, "grid": rows}
 
-    return sudoku_list
+    def createSudokuMap(self):
+        alfabet = self.getAlfabet()
+        data = self.getColumnsAndHeaders()
+        view_to_print = " "
+        for letter in alfabet:
+            view_to_print += f"{letter}  "
 
+        view_to_print += "\n"
+        rows = data.get("grid")
 
-def printSudokuMap():
-    sudoku_list = getSudokiListWithNumbers()
+        row_count = 0
+        for row in rows:
+            row_count += 1
+            view_to_print += f"{row} {row_count} \n"
+        return view_to_print
 
-    # this codes prints the map like is
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # ---------------------------
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # ---------------------------
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # [0, 0, 0][0, 0, 0][0, 0, 0]
-    # ---------------------------
+    def getKeyLocation(self, input):
+        grid_key_locations = self.grid_keys_location
+        uppercase_str = input.upper()
 
-    str_to_pint = "\n"
+        letter_to_find = uppercase_str[0]
+        row_number_to_find = uppercase_str[1]
 
-    arr_index_counter = 0
-    for list in sudoku_list:
-        str_to_pint += str(list)
-        arr_index_counter += 1
+        for dict in grid_key_locations:
+            key = dict.get("key")
+            row = dict.get("row")
 
-        # print list by 3 on each line
-        if arr_index_counter % 3 == 0:
-            str_to_pint += "\n"
+            # print(f"dict {dict}  letter_to_find {letter_to_find} row_number_to_find {row_number_to_find} ley {key} row {row}")
 
-        # print line after 9 lists are printed for readability
-        if arr_index_counter % 9 == 0:
-            str_to_pint += "---------------------------\n"
+            if key == letter_to_find and str(row) == row_number_to_find:
+                number = dict.get("number")
+                return {"message": "", "error": False, "location": dict}
 
-    return str_to_pint
+        return {"message": "", "error": False, "location": {}}
 
+    def askUserForKeyGridLocation(self) -> dict:
 
-# map = printSudokuMap()
-# print(map)
+        while True:
+            answer: str = input("Key: \n")
 
-ALFABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+            if answer == "":
+                print("Vul een waarde in")
 
-
-def getColumnsAndHeaders() -> dict:
-    columns = [[], [], [], [], [], [], [], [], []]
-    rows = [[], [], [], [], [], [], [], [], []]
-
-    for col in columns:
-        for x in range(9):
-            random_int = random.randint(0, 9)
-            if random_int not in col:
-                col.append(random_int)
+            if len(answer) < 2 or len(answer) > 2:
+                print("Je waarde moet minstens er zo uit zien: bijv[column]+[rij] A1")
             else:
-                col.append(0)
+                if answer:
+                    results: dict  = self.getKeyLocation(answer)
+                    if results["error"]:
+                        print(results["error"])
+                        #recursive
+                        self.askUserForKeyGridLocation()
+                    else:                    
+                        return results
 
-    for col in columns:
-        for index in range(9):
-            first_item_of_each_colum = col[index]
+    def run(self):
+        map = self.createSudokuMap()
+        print(f"{map}")
 
-            if first_item_of_each_colum not in rows[index]:
-                rows[index].append(first_item_of_each_colum)
-            else:
-                rows[index].append(0)
+        results: dict = self.askUserForKeyGridLocation()
+        print(f"results {results}")
 
-    grid_keys_location = []
-    row_count = 0
-    for row in rows:
-        for index in range(9):
-            item_of_each_column = row[index]
-            key = f"{ALFABET[index]}"
-            key_location = {
-                "key": key,
-                "row": row_count,
-                "number": item_of_each_column,
-            }
-
-            grid_keys_location.append(key_location)
-        row_count += 1
-
-    return {"grid_keys_location": grid_keys_location, "grid": rows}
+        # print(f"rows {self.grid_rows}")
+        # print(f"grid_columns {self.grid_columns}")
 
 
-def createSudokuMapVerTwo():
-    data = getColumnsAndHeaders()
-    to_print = " "
-    for letter in ALFABET:
-        to_print += f"{letter}  "
-
-    to_print += "\n"
-    rows = data.get("grid")
-
-    row_count = 0
-    for row in rows:
-        row_count += 1
-        to_print += f"{row} {row_count} \n"
-    return to_print
-
-
-test = createSudokuMapVerTwo()
-print(test)
+run = SudokuController()
+run.run()
