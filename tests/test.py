@@ -1,4 +1,6 @@
 import random
+import pprint
+import string
 
 
 VALUES_IN_EACH_LIST = 3
@@ -23,39 +25,34 @@ def getSudokiListWithNumbers() -> list:
     column_one = []
     column_two = []
     column_three = []
-    json = {"column_one": [], "column_two": [], "column_three": []}
+
+    sudoku_list_arr_counter = 0
+
+    rows = []
 
     for list in sudoku_list:
-        for index_in_list in range(VALUES_IN_EACH_LIST):
-            random_int = random.randint(0, 9)
+        random_int = random.randint(1, 9)
 
+        for index_in_list in range(VALUES_IN_EACH_LIST):
             # creates each list with unique number
+
             if random_int not in list:
                 # add numbers in each columns
+
                 if index_in_list == 0 and random_int not in column_one:
                     column_one.append(random_int)
-                    json["column_one"].append({index_in_list: random_int})
                     list[index_in_list] = random_int
-
 
                 if index_in_list == 1 and random_int not in column_two:
                     column_two.append(random_int)
-                    json["column_two"].append({index_in_list: random_int})
                     list[index_in_list] = random_int
-
 
                 if index_in_list == 2 and random_int not in column_three:
                     column_three.append(random_int)
-                    json["column_three"].append({index_in_list: random_int})
                     list[index_in_list] = random_int
 
-
-              
-
-    # print(f"col1 {column_one}")
-    # print(f"col2 {column_two}")
-    # print(f"col3 {column_three}")
-    print(f"list {json}")
+        sudoku_list_arr_counter += 1
+    # print(f" rows {rows}")
 
     return sudoku_list
 
@@ -95,6 +92,66 @@ def printSudokuMap():
     return str_to_pint
 
 
-map = printSudokuMap()
-print(map)
+# map = printSudokuMap()
+# print(map)
 
+ALFABET = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+
+
+def getColumnsAndHeaders() -> dict:
+    columns = [[], [], [], [], [], [], [], [], []]
+    rows = [[], [], [], [], [], [], [], [], []]
+
+    for col in columns:
+        for x in range(9):
+            random_int = random.randint(0, 9)
+            if random_int not in col:
+                col.append(random_int)
+            else:
+                col.append(0)
+
+    for col in columns:
+        for index in range(9):
+            first_item_of_each_colum = col[index]
+
+            if first_item_of_each_colum not in rows[index]:
+                rows[index].append(first_item_of_each_colum)
+            else:
+                rows[index].append(0)
+
+    grid_keys_location = []
+    row_count = 0
+    for row in rows:
+        for index in range(9):
+            item_of_each_column = row[index]
+            key = f"{ALFABET[index]}"
+            key_location = {
+                "key": key,
+                "row": row_count,
+                "number": item_of_each_column,
+            }
+
+            grid_keys_location.append(key_location)
+        row_count += 1
+
+    return {"grid_keys_location": grid_keys_location, "grid": rows}
+
+
+def createSudokuMapVerTwo():
+    data = getColumnsAndHeaders()
+    to_print = " "
+    for letter in ALFABET:
+        to_print += f"{letter}  "
+
+    to_print += "\n"
+    rows = data.get("grid")
+
+    row_count = 0
+    for row in rows:
+        row_count += 1
+        to_print += f"{row} {row_count} \n"
+    return to_print
+
+
+test = createSudokuMapVerTwo()
+print(test)
