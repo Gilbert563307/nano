@@ -2,6 +2,7 @@ from controller.RandomNumberGuesserController import RandomNumberGuesserControll
 from controller.DiaryController import DiaryController
 from controller.HangManController import HangManController
 from controller.GuiController import GuiController
+from controller.SudokuController import SudokuController
 from helpers.Helpers import Helpers
 from colorama import Fore
 from config import config
@@ -31,7 +32,8 @@ class NanoXLController:
                 config.HANG_MAN_REQUEST,
                 config.GUI_REQUEST,
                 config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST,
-                config.HANG_MAN_BY_COMPUTER_REQUEST
+                config.HANG_MAN_BY_COMPUTER_REQUEST,
+                config.SUDOKU_REQUEST,
             ]
 
             # check if user has not made right option between in allowed_requests
@@ -59,6 +61,10 @@ class NanoXLController:
                 # check if de gebruiker game mode heeft gekozen voor GUI
                 if request == config.GUI_REQUEST:
                     controller = GuiController()
+                    controller.run()
+
+                if request == config.SUDOKU_REQUEST:
+                    controller = SudokuController()
                     controller.run()
 
                 #BOT GAME MODES

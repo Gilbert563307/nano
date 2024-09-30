@@ -69,6 +69,7 @@ class Helpers:
                 f"Kies ({config.GUI_REQUEST}) voor de GUI",
                 f"Kies ({config.GUESS_THE_NUMBER_BY_COMPUTER_REQUEST}) voor raad het getal, die door de computer wordt gespeeld.",
                 f"Kies ({config.HANG_MAN_BY_COMPUTER_REQUEST}) voor galgje, die door de computer wordt gespeeld.",
+                f"Kies ({config.SUDOKU_REQUEST}) voor sudoku.",
                 f"Kies ({config.CLOSE_REQUEST}) om de nano appstore af te sluiten. \n",
             ]
 
