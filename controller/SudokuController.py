@@ -252,8 +252,6 @@ class SudokuController:
                         return self.askUserForKeyGridLocation()
                     else:
                         return results
-            # when user ends game by exit command
-            return {"number": 0}
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [askUserForKeyGridLocation]: {e}")
