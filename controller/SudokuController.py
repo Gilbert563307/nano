@@ -2,6 +2,7 @@ import random
 from typing import Dict, List
 from helpers.Helpers import Helpers
 from colorama import Fore
+from config import config
 
 
 class SudokuController:
@@ -11,6 +12,53 @@ class SudokuController:
         self.grid_rows: list = []
         self.grid_columns: list = []
         self.map: str = ""
+
+    def setGridKeysLocation(self, grid_keys_location: list) -> bool:
+        try:
+            self.grid_keys_location = grid_keys_location
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [setGridKeysLocation]: {e}")
+            return False
+
+    def getGridKeysLocation(self) -> list[Dict]:
+        try:
+            return self.grid_keys_location
+        except Exception as e:
+            print(f"An error occurred [getGridKeysLocation]: {e}")
+            return []
+
+    def setGridRows(self, grid_rows: list) -> bool:
+        try:
+            self.grid_rows = grid_rows
+            return True
+        except Exception as e:
+            print(f"An error occurred [setGridRows]: {e}")
+            return False
+
+    def setGridColumns(self, grid_columns: list) -> bool:
+        try:
+            self.grid_columns = grid_columns
+            return True
+        except Exception as e:
+            print(f"An error occurred [setGridColumns]: {e}")
+            return False
+
+    def setMap(self, map_data: str) -> bool:
+        try:
+            self.map = map_data
+            return True
+        except Exception as e:
+            print(f"An error occurred [setMap]: {e}")
+            return False
+
+    def getMap(self) -> str:
+        try:
+            return self.map
+        except Exception as e:
+            print(f"An error occurred [getMap]: {e}")
+            return ""
 
     def getAlfabet(self) -> list[str]:
         return ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
@@ -36,19 +84,19 @@ class SudokuController:
         try:
             alfabet: List[str] = self.getAlfabet()
 
-            grid_columns = [[] for _ in range(9)]
+            grid_columns = [[] for _ in range(config.GRID_PATTERN)]
 
             for list in updated_grid_rows:
-                for index in range(9):
+                for index in range(config.GRID_PATTERN):
                     first_item_of_each_list = list[index]
                     grid_columns[index].append(first_item_of_each_list)
 
-            self.grid_columns = grid_columns
-            self.grid_rows = updated_grid_rows
+            self.setGridColumns(grid_columns)
+            self.setGridRows(updated_grid_rows)
 
             grid_map: str = self.createSudokuStringForUser(
                 updated_grid_rows, alfabet)
-            self.map = grid_map
+            self.setMap(grid_map)
 
             return True
         except Exception as e:
@@ -57,16 +105,18 @@ class SudokuController:
 
     def getUniqueGrid(self) -> list[int]:
         try:
-            unique_columns_and_not_unique_rows = [[] for _ in range(9)]
-            unique_rows_and_columns = [[] for _ in range(9)]
+            unique_columns_and_not_unique_rows = [
+                [] for _ in range(config.GRID_PATTERN)]
+            unique_rows_and_columns = [[] for _ in range(config.GRID_PATTERN)]
 
-            grid_columns = [[] for _ in range(9)]
+            grid_columns = [[] for _ in range(config.GRID_PATTERN)]
 
             for col in unique_columns_and_not_unique_rows:
-                for index in range(9):
+                for index in range(config.GRID_PATTERN):
                     random_int = random.randint(0, 9)
                     # # create unqie column but not a row
-                    if random_int not in col:
+                    random_bool = random.getrandbits(1)
+                    if random_bool and random_int not in col:
                         col.append(random_int)
                     else:
                         col.append(0)
@@ -81,26 +131,26 @@ class SudokuController:
                         unique_rows_and_columns[index].append(0)
 
             for list in unique_rows_and_columns:
-                for index in range(9):
+                for index in range(config.GRID_PATTERN):
                     first_item_of_each_list = list[index]
                     grid_columns[index].append(first_item_of_each_list)
 
             # set rows and columns to global state
-            self.grid_columns = grid_columns
-            self.grid_rows = unique_rows_and_columns
+            self.setGridColumns(grid_columns)
+            self.setGridRows(unique_rows_and_columns)
 
             return unique_rows_and_columns
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [getUniqueGrid]: {e}")
 
-    def getGridKeysAndLocation(self, rows: list) -> list[dict]:
+    def createGridKeysAndLocation(self, rows: list) -> list[dict]:
         try:
             grid_keys_location: list = []
             row_count: int = 1
             alfabet = self.getAlfabet()
             for row in rows:
-                for index in range(9):
+                for index in range(config.GRID_PATTERN):
                     item_of_each_column = row[index]
                     key = f"{alfabet[index]}"
                     key_location = {
@@ -116,14 +166,15 @@ class SudokuController:
             return grid_keys_location
         except Exception as e:
             # Handles the exception
-            print(f"An error occurred [getGridKeysAndLocation]: {e}")
+            print(f"An error occurred [createGridKeysAndLocation]: {e}")
 
     def getColumnsAndHeaders(self) -> dict:
         try:
             rows: list[int] = self.getUniqueGrid()
-            grid_keys_location: list[dict] = self.getGridKeysAndLocation(rows)
+            grid_keys_location: list[dict] = self.createGridKeysAndLocation(
+                rows)
 
-            self.grid_keys_location = grid_keys_location
+            self.setGridKeysLocation(grid_keys_location)
             return {"grid_keys_location": grid_keys_location, "grid": rows}
         except Exception as e:
             # Handles the exception
@@ -156,7 +207,7 @@ class SudokuController:
             for row in rows:
                 row_count += 1
                 view_to_print += f"{colors[row_count]
-                                    }{row} {row_count}{reset_color} \n"
+                                    }{row} {reset_color}{row_count} \n"
 
             return view_to_print
         except Exception as e:
@@ -170,15 +221,41 @@ class SudokuController:
             rows: list[int] = data.get("grid")
 
             view_to_print: str = self.createSudokuStringForUser(rows, alfabet)
-            self.map = view_to_print
+            self.setMap(view_to_print)
             return view_to_print
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [createSudokuMap]: {e}")
 
+    def updateGridKeyLocations(self, rows: list[int]) -> bool:
+        try:
+            grid_keys_location: list[dict] = self.createGridKeysAndLocation(
+                rows)
+
+            self.setGridKeysLocation(grid_keys_location)
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [updateGridKeyLocations]: {e}")
+            return False
+        
+    
+    def checkIfUserHasWonGame(self) -> bool:
+        try:
+            grid_rows: list[int] = self.getGridRows()
+            for row in grid_rows:
+                if 0 in row:
+                    return False
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [checkIfUserHasWonGame]: {e}")
+            return False
+
     def getKeyLocation(self, input) -> dict:
         try:
-            grid_key_locations: list[Dict] = self.grid_keys_location
+            # grid_key_locations: list[Dict] = self.updatedGridKeyLocations()
+            grid_key_locations: list[Dict] = self.getGridKeysLocation()
             uppercase_str: str = input.upper()
 
             letter_to_find: str = uppercase_str[0]
@@ -268,7 +345,7 @@ class SudokuController:
 
             grid_colum: list[int] = self.getGridColumns()[column_key_to_check]
 
-            if number_to_save in grid_row and number_to_save in grid_colum:
+            if number_to_save in grid_row or number_to_save in grid_colum:
                 return {
                     "message": "Het getal mag niet in de rij en kollom zijn",
                     "error": True,
@@ -289,18 +366,28 @@ class SudokuController:
 
     def handleGameLogic(self) -> None:
         try:
-            print(self.map)
+            map: str = self.getMap()
+            print(map)
+
+            # check if the user has won
+            user_won: bool = self.checkIfUserHasWonGame()
+            if user_won:
+                message: str = "Je heb gewonnen!!! \n"
+                self._getHelpersService().printColouredMessage(message, Fore.GREEN)
+                self._getHelpersService().printGameOptionsToUser(header=False)
+                return
+
             results: dict = self.askUserForKeyGridLocation()
             location: dict = results.get("location")
 
             if len(location) == 0:
-                #end game looop
-                self._getHelpersService().printGameOptionsToUser(clear_console=True)    
+                # end game looop
+                self._getHelpersService().printGameOptionsToUser(header=False, clear_console=True)
                 return
 
             if location.get("number") != 0:
                 message: str = "Deze locatie bevat al een waarde"
-                self._getHelpersService().printColouredMessage(message, Fore.YELLOW)
+                print(message)
                 return self.handleGameLogic()
 
             # ask user to save number to that location

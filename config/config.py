@@ -39,3 +39,6 @@ CLOSE_REQUEST: int = 10
 
 #app name
 APP_NAME: str = "PocketApps"
+
+#Sudoku GRID_pattern
+GRID_PATTERN: int = 9
