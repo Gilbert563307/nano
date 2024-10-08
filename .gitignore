@@ -1,3 +1,4 @@
 json/hangmanscore.txt
-.env
+.venv
+.nano_env
 tests/testWindow.py
