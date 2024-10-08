@@ -38,7 +38,7 @@ class DiaryModel:
             file_name: str = self.getDiaryJsonFileName()
 
             # create file path
-            file_path: str = f"{current_dir_path}\json\{file_name}"
+            file_path: str = f"{current_dir_path}/json/{file_name}"
 
             return file_path
         except Exception as e:

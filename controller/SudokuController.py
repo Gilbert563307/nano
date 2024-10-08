@@ -46,7 +46,8 @@ class SudokuController:
             self.grid_columns = grid_columns
             self.grid_rows = updated_grid_rows
 
-            grid_map: str = self.createSudokuStringForUser(updated_grid_rows, alfabet)
+            grid_map: str = self.createSudokuStringForUser(
+                updated_grid_rows, alfabet)
             self.map = grid_map
 
             return True
@@ -74,7 +75,8 @@ class SudokuController:
                     first_item_of_each_colum = col[index]
 
                     if first_item_of_each_colum not in unique_rows_and_columns[index]:
-                        unique_rows_and_columns[index].append(first_item_of_each_colum)
+                        unique_rows_and_columns[index].append(
+                            first_item_of_each_colum)
                     else:
                         unique_rows_and_columns[index].append(0)
 
@@ -153,7 +155,8 @@ class SudokuController:
             row_count: int = 0
             for row in rows:
                 row_count += 1
-                view_to_print += f"{colors[row_count]}{row} {row_count}{reset_color} \n"
+                view_to_print += f"{colors[row_count]
+                                    }{row} {row_count}{reset_color} \n"
 
             return view_to_print
         except Exception as e:
@@ -203,9 +206,9 @@ class SudokuController:
 
                 if answer == "":
                     print("Vul een waarde in")
-                
-                if answer == "exit": # TODO FINISH 
-                    return
+
+                if answer == "exit":  # TODO FINISH
+                    return {"message": "", "error": False, "location": {}}
 
                 anwser_length: int = len(answer)
                 if anwser_length < 2 or anwser_length > 3:
@@ -249,6 +252,8 @@ class SudokuController:
                         return self.askUserForKeyGridLocation()
                     else:
                         return results
+            # when user ends game by exit command
+            return {"number": 0}
         except Exception as e:
             # Handles the exception
             print(f"An error occurred [askUserForKeyGridLocation]: {e}")
@@ -290,6 +295,11 @@ class SudokuController:
             results: dict = self.askUserForKeyGridLocation()
             location: dict = results.get("location")
 
+            if len(location) == 0:
+                #end game looop
+                self._getHelpersService().printGameOptionsToUser(clear_console=True)    
+                return
+
             if location.get("number") != 0:
                 message: str = "Deze locatie bevat al een waarde"
                 self._getHelpersService().printColouredMessage(message, Fore.YELLOW)
@@ -299,7 +309,8 @@ class SudokuController:
             number_to_save: int = self.askUserForNumber()
 
             # check if number can be saved to that location'
-            results: dict = self.trySavingNumberToGrid(number_to_save, location)
+            results: dict = self.trySavingNumberToGrid(
+                number_to_save, location)
             if results["error"]:
                 self._getHelpersService().printColouredMessage(
                     results["message"], Fore.RED
@@ -311,7 +322,6 @@ class SudokuController:
                 return self.handleGameLogic()
             else:
                 self._getHelpersService().printColouredMessage("Er iets fout gegaan", Fore.RED)
-
 
         except Exception as e:
             # Handles the exception
