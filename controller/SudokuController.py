@@ -206,8 +206,7 @@ class SudokuController:
             row_count: int = 0
             for row in rows:
                 row_count += 1
-                view_to_print += f"{colors[row_count]
-                                    }{row} {reset_color}{row_count} \n"
+                view_to_print += f"{colors[row_count]}{row} {reset_color}{row_count} \n"
 
             return view_to_print
         except Exception as e:
