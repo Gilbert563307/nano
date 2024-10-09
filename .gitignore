@@ -3,3 +3,5 @@ json/hangmanscore.txt
 .nano_env
 tests/testWindow.py
 .env
+json/dagboek.json
+json/hangmanscore.txt

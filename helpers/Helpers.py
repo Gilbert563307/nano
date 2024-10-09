@@ -103,8 +103,11 @@ class Helpers:
 
     def getCurrentWorkingDirFolderPath(self) -> str:
         try:
-            cur_path: str = os.getcwd()
-            return cur_path
+            # Get the directory where the script is located this: returns the model folder
+            script_path = os.path.dirname(os.path.abspath(__file__))
+            # remove the model name from tha pag
+            current_dir_path = script_path[: len(script_path) - 7]
+            return current_dir_path
         except Exception as e:
             # Handles the exception
             print(f"An error [getCurrentWorkingDirFolderPath]: {e}")

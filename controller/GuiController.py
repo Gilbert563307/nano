@@ -6,6 +6,7 @@ from helpers.Helpers import Helpers
 from config import config
 from controller.WeatherGuiController import WeatherGuiController
 from controller.FilmRouleteController import FilmRouleteController
+import os
 
 
 class GuiController:
@@ -32,6 +33,7 @@ class GuiController:
         current_dir_path: str = (
             self._getHelpersService().getCurrentWorkingDirFolderPath()
         )
+
         assets_path: str = f"{current_dir_path}/builds/build_main/assets/frame0"
         return assets_path / Path(file)
 

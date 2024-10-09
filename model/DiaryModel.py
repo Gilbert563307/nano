@@ -30,14 +30,9 @@ class DiaryModel:
 
     def getDiaryFilePath(self) -> str:
         try:
-            # get current folder diir
-            current_dir_path: str = (
-                self._getHelpersService().getCurrentWorkingDirFolderPath()
-            )
             # get file name
             file_name: str = self.getDiaryJsonFileName()
 
-          
             # Get the directory where the script is located this: returns the model folder
             script_path = os.path.dirname(os.path.abspath(__file__))
             #remove the model name from tha pag

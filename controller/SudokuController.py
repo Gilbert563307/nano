@@ -12,6 +12,24 @@ class SudokuController:
         self.grid_rows: list = []
         self.grid_columns: list = []
         self.map: str = ""
+        self.grid_pattern = config.GRID_PATTERN_9_9
+
+    def setGridPattern(self, pattern) -> bool:
+        try:
+            self.grid_pattern = pattern
+            return True
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [setGridPattern]: {e}")
+            return False
+
+    def getGridPattern(self) -> int:
+        try:
+            return self.grid_pattern
+        except Exception as e:
+            # Handles the exception
+            print(f"An error occurred [setGridPattern]: {e}")
+            return config.GRID_PATTERN_9_9
 
     def setGridKeysLocation(self, grid_keys_location: list) -> bool:
         try:
@@ -61,7 +79,10 @@ class SudokuController:
             return ""
 
     def getAlfabet(self) -> list[str]:
-        return ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+        grid_pattern: int = self.getGridPattern()
+        # if grid_pattern == config.GRID_PATTERN_3_3:
+        #     return ["A", "B", "C"]
+        return ["A", "B", "C", "D", "E", "F", "G", "H", "I"][0:grid_pattern]
 
     def _getHelpersService(self) -> Helpers:
         return Helpers()
@@ -82,20 +103,20 @@ class SudokuController:
 
     def updateGameMap(self, updated_grid_rows: list[int]) -> bool:
         try:
+            grid_pattern: int = self.getGridPattern()
             alfabet: List[str] = self.getAlfabet()
 
-            grid_columns = [[] for _ in range(config.GRID_PATTERN)]
+            grid_columns = [[] for _ in range(grid_pattern)]
 
             for list in updated_grid_rows:
-                for index in range(config.GRID_PATTERN):
+                for index in range(grid_pattern):
                     first_item_of_each_list = list[index]
                     grid_columns[index].append(first_item_of_each_list)
 
             self.setGridColumns(grid_columns)
             self.setGridRows(updated_grid_rows)
 
-            grid_map: str = self.createSudokuStringForUser(
-                updated_grid_rows, alfabet)
+            grid_map: str = self.createSudokuStringForUser(updated_grid_rows, alfabet)
             self.setMap(grid_map)
 
             return True
@@ -105,14 +126,15 @@ class SudokuController:
 
     def getUniqueGrid(self) -> list[int]:
         try:
-            unique_columns_and_not_unique_rows = [
-                [] for _ in range(config.GRID_PATTERN)]
-            unique_rows_and_columns = [[] for _ in range(config.GRID_PATTERN)]
+            grid_pattern: int = self.getGridPattern()
 
-            grid_columns = [[] for _ in range(config.GRID_PATTERN)]
+            unique_columns_and_not_unique_rows = [[] for _ in range(grid_pattern)]
+            unique_rows_and_columns = [[] for _ in range(grid_pattern)]
+
+            grid_columns = [[] for _ in range(grid_pattern)]
 
             for col in unique_columns_and_not_unique_rows:
-                for index in range(config.GRID_PATTERN):
+                for index in range(grid_pattern):
                     random_int = random.randint(0, 9)
                     # # create unqie column but not a row
                     random_bool = random.getrandbits(1)
@@ -125,13 +147,12 @@ class SudokuController:
                     first_item_of_each_colum = col[index]
 
                     if first_item_of_each_colum not in unique_rows_and_columns[index]:
-                        unique_rows_and_columns[index].append(
-                            first_item_of_each_colum)
+                        unique_rows_and_columns[index].append(first_item_of_each_colum)
                     else:
                         unique_rows_and_columns[index].append(0)
 
             for list in unique_rows_and_columns:
-                for index in range(config.GRID_PATTERN):
+                for index in range(grid_pattern):
                     first_item_of_each_list = list[index]
                     grid_columns[index].append(first_item_of_each_list)
 
@@ -146,11 +167,12 @@ class SudokuController:
 
     def createGridKeysAndLocation(self, rows: list) -> list[dict]:
         try:
+            grid_pattern: int = self.getGridPattern()
             grid_keys_location: list = []
             row_count: int = 1
             alfabet = self.getAlfabet()
             for row in rows:
-                for index in range(config.GRID_PATTERN):
+                for index in range(grid_pattern):
                     item_of_each_column = row[index]
                     key = f"{alfabet[index]}"
                     key_location = {
@@ -171,8 +193,7 @@ class SudokuController:
     def getColumnsAndHeaders(self) -> dict:
         try:
             rows: list[int] = self.getUniqueGrid()
-            grid_keys_location: list[dict] = self.createGridKeysAndLocation(
-                rows)
+            grid_keys_location: list[dict] = self.createGridKeysAndLocation(rows)
 
             self.setGridKeysLocation(grid_keys_location)
             return {"grid_keys_location": grid_keys_location, "grid": rows}
@@ -228,8 +249,7 @@ class SudokuController:
 
     def updateGridKeyLocations(self, rows: list[int]) -> bool:
         try:
-            grid_keys_location: list[dict] = self.createGridKeysAndLocation(
-                rows)
+            grid_keys_location: list[dict] = self.createGridKeysAndLocation(rows)
 
             self.setGridKeysLocation(grid_keys_location)
             return True
@@ -237,8 +257,7 @@ class SudokuController:
             # Handles the exception
             print(f"An error occurred [updateGridKeyLocations]: {e}")
             return False
-        
-    
+
     def checkIfUserHasWonGame(self) -> bool:
         try:
             grid_rows: list[int] = self.getGridRows()
@@ -381,7 +400,9 @@ class SudokuController:
 
             if len(location) == 0:
                 # end game looop
-                self._getHelpersService().printGameOptionsToUser(header=False, clear_console=True)
+                self._getHelpersService().printGameOptionsToUser(
+                    header=False, clear_console=True
+                )
                 return
 
             if location.get("number") != 0:
@@ -393,8 +414,7 @@ class SudokuController:
             number_to_save: int = self.askUserForNumber()
 
             # check if number can be saved to that location'
-            results: dict = self.trySavingNumberToGrid(
-                number_to_save, location)
+            results: dict = self.trySavingNumberToGrid(number_to_save, location)
             if results["error"]:
                 self._getHelpersService().printColouredMessage(
                     results["message"], Fore.RED
@@ -405,7 +425,9 @@ class SudokuController:
             if updated:
                 return self.handleGameLogic()
             else:
-                self._getHelpersService().printColouredMessage("Er iets fout gegaan", Fore.RED)
+                self._getHelpersService().printColouredMessage(
+                    "Er iets fout gegaan", Fore.RED
+                )
 
         except Exception as e:
             # Handles the exception
@@ -441,8 +463,38 @@ class SudokuController:
             # Handles the exception
             print(f"An error occurred [askUserForNumber]: {e}")
 
+    def asksUserForGameMode(self) -> int:
+        while True:
+            try:
+                allowed_options: list[int] = [
+                    config.SUDOKU_GAME_MODE_EASY,
+                    config.SUDOKU_GAME_MODE_HARD,
+                ]
+                for key in config.GAME_MODES_SUDOKU:
+                    obj: dict = config.GAME_MODES_SUDOKU[key]
+                    name: str = obj.get("name")
+                    message: str = f"Kies {key} om de gamemode op {name} te spelen: "
+                    print(message)
+
+                while True:
+                    option: int = int(input(""))
+                    if option not in allowed_options:
+                        self._getHelpersService().printColouredMessage(
+                            "Jou keuze moet 1 of 2 zijn", Fore.RED
+                        )
+                        return self.asksUserForGameMode()
+                    return option
+
+            except ValueError:
+                self._getHelpersService().printColouredMessage(
+                    "Fout! voer een getal in", Fore.RED
+                )
+
     def run(self):
         try:
+            game_mode: int = self.asksUserForGameMode()
+            self.setGridPattern(config.GAME_MODES_SUDOKU[game_mode]["grid_pattern"])
+
             self.createSudokuMap()
             self.handleGameLogic()
 

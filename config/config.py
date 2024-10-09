@@ -37,8 +37,17 @@ SUDOKU_REQUEST: int = 7
 CLOSE_REQUEST: int = 10
 
 
-#app name
+# app name
 APP_NAME: str = "PocketApps"
 
-#Sudoku GRID_pattern
-GRID_PATTERN: int = 9
+# Sudoku GRID_pattern
+GRID_PATTERN_9_9: int = 9
+GRID_PATTERN_3_3: int = 3
+
+SUDOKU_GAME_MODE_EASY: int = 1
+SUDOKU_GAME_MODE_HARD: int = 2
+
+GAME_MODES_SUDOKU: dict = {
+    SUDOKU_GAME_MODE_EASY: {"name": "easy", "grid_pattern": GRID_PATTERN_3_3},
+    SUDOKU_GAME_MODE_HARD: {"name": "hard", "grid_pattern": GRID_PATTERN_9_9},
+}
