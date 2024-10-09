@@ -3,3 +3,4 @@ Vincent;woord geraden:Ja;aantal keer:7;datum:22/09/2024
 BOT;woord geraden:Nee;aantal keer:7;datum:23/09/2024
 BOT;woord geraden:Nee;aantal keer:8;datum:26/09/2024
 gilbert;woord geraden:Nee;aantal keer:14;datum:26/09/2024
+BOT;woord geraden:Nee;aantal keer:6;datum:08/10/2024

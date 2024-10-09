@@ -37,9 +37,15 @@ class DiaryModel:
             # get file name
             file_name: str = self.getDiaryJsonFileName()
 
-            # create file path
-            file_path: str = f"{current_dir_path}/json/{file_name}"
+          
+            # Get the directory where the script is located this: returns the model folder
+            script_path = os.path.dirname(os.path.abspath(__file__))
+            #remove the model name from tha pag
+            updated_path = script_path[:len(script_path)-5]
 
+            # create file path added the json
+            file_path: str = os.path.join(updated_path, "json", file_name)
+      
             return file_path
         except Exception as e:
             # Handles the exception
@@ -62,8 +68,8 @@ class DiaryModel:
         try:
             file_name: str = self.getDiaryFilePath()
 
-            # create file,   x appends data to the end of the file
-            file = open(file_name, "x")
+            # create file, 
+            file = open(file_name, "w")
 
             # close file
             file.close()
