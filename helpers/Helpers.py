@@ -5,6 +5,7 @@ from datetime import date
 from config import config
 from art import tprint
 from pathlib import Path
+from dotenv import load_dotenv
 
 
 class Helpers:
@@ -14,6 +15,7 @@ class Helpers:
 
     def getEnvVar(self, var: str) -> str | int | float:
         try:
+            load_dotenv()
             return os.getenv(var)
         except Exception as e:
             print(f"An error occurred [getEnvVar]: {e}")
